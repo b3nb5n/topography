@@ -1,0 +1,22 @@
+{
+	"name": "topography-cms",
+	"version": "0.1.0",
+	"description": "An open-source content managment system",
+	"repository": "https://github.com/baldwin-dev-co/topography-cms.git",
+	"author": "Ben Baldwin <benbaldwin000@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"workspaces": [
+		"client",
+		"server/*"
+	],
+	"scripts": {
+		"test": "lerna run test --since",
+		"build": "lerna run build",
+		"dev": "lerna run dev",
+		"version": "lerna version --no-push"
+	},
+	"devDependencies": {
+		"lerna": "^4.0.0"
+	}
+}
