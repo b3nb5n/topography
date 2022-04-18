@@ -1,50 +1,11 @@
-import _ from 'lodash'
+import lodash from 'lodash'
+import { ResourceMeta, ResourceMetaJSON, ResourceType } from './meta'
 
-export enum Visibility {
-	live,
-	draft,
-	archived,
-	deleted,
+export interface ResourceJson<T extends ResourceType, D> {
+	id?: string
+	meta: ResourceMetaJSON<T>
+	data: D
 }
-
-interface ResourceMetaJSON {
-	created: string
-	edited: string
-	visibility: Visibility
-}
-
-class ResourceMeta {
-	created: Date
-	edited: Date
-	visibility: Visibility
-
-	constructor() {
-		const now = Date.now()
-		this.created = new Date(now)
-		this.edited = new Date(now)
-		this.visibility = Visibility.live
-	}
-
-	static fromJSON(json: ResourceMetaJSON): ResourceMeta {
-		const meta = new ResourceMeta()
-
-		meta.created = new Date(Date.parse(json.created))
-		meta.edited = new Date(Date.parse(json.edited))
-		meta.visibility = json.visibility
-
-		return meta
-	}
-
-	toJSON(): ResourceMetaJSON {
-		return {
-			created: this.created.toUTCString(),
-			edited: this.edited.toUTCString(),
-			visibility: this.visibility,
-		}
-	}
-}
-
-export type resourceData = {}
 
 type DeepPartial<T> = T extends object
 	? {
@@ -52,26 +13,39 @@ type DeepPartial<T> = T extends object
 	  }
 	: T
 
-export class Resource<T extends resourceData> {
+export class Resource<T extends ResourceType, D> {
 	readonly id?: string
-	readonly meta: ResourceMeta
-	private _data: T
+	private _data: D
+	meta: ResourceMeta<T>
 
-	get data(): T {
+	get data(): D {
 		return this._data
 	}
 
-	constructor(data: T) {
-		this.meta = new ResourceMeta()
+	constructor(type: T, data: D) {
+		this.meta = new ResourceMeta(type)
 		this._data = data
 	}
 
-	setVisibility(value: Visibility) {
-		this.meta.visibility = value
+	static fromJSON<T extends ResourceType, D>(json: ResourceJson<T, D>): Resource<T, D> {
+		const resource = new Resource<T, D>(json.meta.type, json.data)
+		resource.meta = ResourceMeta.fromJSON(json.meta)
+		return resource
 	}
 
-	updateData(data: DeepPartial<T>) {
-		this._data = _.merge(this._data, data)
+	toJSON = (): ResourceJson<T, D> => ({
+		id: this.id,
+		meta: this.meta.toJSON(),
+		data: this._data,
+	})
+
+	setData(data: D) {
+		this._data = data
+		this.meta.edited = new Date(Date.now())
+	}
+
+	updateData(data: DeepPartial<D>) {
+		this._data = lodash.merge(this._data, data)
 		this.meta.edited = new Date(Date.now())
 	}
 }
