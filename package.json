@@ -8,12 +8,13 @@
 	"private": true,
 	"workspaces": [
 		"client",
-		"server/*"
+		"server/*",
+		"common/*"
 	],
 	"scripts": {
 		"test": "lerna run test --since",
 		"build": "lerna run build",
-		"dev": "lerna run dev",
+		"dev": "lerna run dev --parallel",
 		"version": "lerna version --no-push"
 	},
 	"devDependencies": {
