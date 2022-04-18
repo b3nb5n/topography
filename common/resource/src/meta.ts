@@ -25,8 +25,9 @@ export class ResourceMeta<T extends ResourceType> {
 	visibility: Visibility
 
 	constructor(type: T) {
-		this.type = type
 		const now = Date.now()
+
+		this.type = type
 		this.created = new Date(now)
 		this.edited = new Date(now)
 		this.visibility = Visibility.live

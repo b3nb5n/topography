@@ -11,7 +11,10 @@
 	"dependencies": {
 		"@topography/resource": "workspace:^",
 		"express": "^4.17.3",
-		"lodash": "^4.17.21"
+		"json-schema-to-zod": "^0.0.0-beta.0",
+		"lodash": "^4.17.21",
+		"mongodb": "^4.5.0",
+		"zod": "^3.14.4"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",

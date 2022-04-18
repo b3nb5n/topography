@@ -14,12 +14,21 @@ type DeepPartial<T> = T extends object
 	: T
 
 export class Resource<T extends ResourceType, D> {
-	readonly id?: string
+	private _id?: string
 	private _data: D
 	meta: ResourceMeta<T>
 
-	get data(): D {
+	get id() {
+		return this._id
+	}
+
+	get data() {
 		return this._data
+	}
+
+	set data(data: D) {
+		this._data = data
+		this.meta.edited = new Date(Date.now())
 	}
 
 	constructor(type: T, data: D) {
@@ -29,6 +38,7 @@ export class Resource<T extends ResourceType, D> {
 
 	static fromJSON<T extends ResourceType, D>(json: ResourceJson<T, D>): Resource<T, D> {
 		const resource = new Resource<T, D>(json.meta.type, json.data)
+		resource._id = json.id
 		resource.meta = ResourceMeta.fromJSON(json.meta)
 		return resource
 	}
@@ -38,11 +48,6 @@ export class Resource<T extends ResourceType, D> {
 		meta: this.meta.toJSON(),
 		data: this._data,
 	})
-
-	setData(data: D) {
-		this._data = data
-		this.meta.edited = new Date(Date.now())
-	}
 
 	updateData(data: DeepPartial<D>) {
 		this._data = lodash.merge(this._data, data)

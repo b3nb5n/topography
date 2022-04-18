@@ -1,3 +1,2 @@
-export * from './collection'
-export * from './item'
-export * from './property'
+export * from './meta'
+export * from './resource'
