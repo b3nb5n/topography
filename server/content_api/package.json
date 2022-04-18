@@ -9,7 +9,7 @@
 		"dev": "ts-node-dev --respawn src/index.ts"
 	},
 	"dependencies": {
-		"@topography/resource": "0.1.0",
+		"@topography/resource": "workspace:^",
 		"express": "^4.17.3",
 		"lodash": "^4.17.21"
 	},
