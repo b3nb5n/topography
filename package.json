@@ -8,6 +8,7 @@
 	"private": true,
 	"workspaces": [
 		"client",
+		"prisma",
 		"server/*",
 		"common/*"
 	],
@@ -15,10 +16,14 @@
 		"test": "lerna run test --since",
 		"build": "lerna run build",
 		"dev": "lerna run dev --parallel",
-		"version": "lerna version --no-push"
+		"version": "lerna version --no-push",
+		"db:start": "docker run --name topography_db -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres"
 	},
 	"devDependencies": {
 		"lerna": "^4.0.0"
 	},
-	"packageManager": "yarn@3.2.0"
+	"packageManager": "yarn@3.2.0",
+	"dependencies": {
+		"@prisma/client": "3.12.0"
+	}
 }

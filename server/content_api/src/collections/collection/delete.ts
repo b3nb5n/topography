@@ -1,13 +1,10 @@
 import { Request, Response } from 'express'
-import { collectionDataSchema } from '../collection'
+import db from '../../prisma'
 
 const deleteCollection = async (req: Request, res: Response) => {
-	const { property: propertyID, collection: collectionID } = req.params
-	if (!propertyID || !collectionID) return res.sendStatus(400)
-
-	const parseResult = await collectionDataSchema.deepPartial().safeParseAsync(req.body)
-	if (!parseResult.success) return res.sendStatus(400)
-
+	const { collectionID } = req.params
+	if (!collectionID) return res.sendStatus(400)
+	await db.collection.delete({ where: { id: collectionID } })
 	return res.sendStatus(200)
 }
 

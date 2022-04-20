@@ -1,5 +1,5 @@
 {
-	"name": "@topography/resource",
+	"name": "@topography/utils",
 	"version": "0.1.0",
 	"license": "MIT",
 	"private": true,
@@ -11,6 +11,8 @@
 	},
 	"dependencies": {
 		"lodash": "^4.17.21",
+		"tozod": "^3.0.0",
+		"uid": "^2.0.0",
 		"zod": "^3.14.4"
 	},
 	"devDependencies": {

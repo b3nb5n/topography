@@ -1,0 +1,13 @@
+{
+	"name": "@topography/prisma",
+	"packageManager": "yarn@3.2.0",
+	"private": true,
+	"scripts": {
+		"dev": "prisma generate --watch",
+		"build": "prisma generate",
+		"format": "prisma format"
+	},
+	"devDependencies": {
+		"prisma": "^3.12.0"
+	}
+}

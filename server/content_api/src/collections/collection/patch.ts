@@ -1,12 +1,20 @@
+import { collectionSchema, dataSchema } from '@topography/utils'
 import { Request, Response } from 'express'
-import { collectionDataSchema } from '../collection'
+import db from '../../prisma'
 
 const patchCollection = async (req: Request, res: Response) => {
-	const { property: propertyID, collection: collectionID } = req.params
-	if (!propertyID || !collectionID) return res.sendStatus(400)
+	const { collectionId } = req.params
+	if (!collectionId) return res.sendStatus(400)
 
-	const parseResult = await collectionDataSchema.deepPartial().safeParseAsync(req.body)
+	const parseResult = await dataSchema(collectionSchema)
+		.deepPartial()
+		.safeParseAsync(req.body)
 	if (!parseResult.success) return res.sendStatus(400)
+
+	await db.collection.update({
+		where: { id: collectionId },
+		data: parseResult.data,
+	})
 
 	return res.sendStatus(200)
 }

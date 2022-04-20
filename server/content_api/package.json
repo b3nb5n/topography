@@ -9,16 +9,19 @@
 		"dev": "ts-node-dev --respawn src/index.ts"
 	},
 	"dependencies": {
-		"@topography/resource": "workspace:^",
+		"@prisma/client": "^3.12.0",
+		"@topography/utils": "workspace:^",
 		"express": "^4.17.3",
 		"json-schema-to-zod": "^0.0.0-beta.0",
 		"lodash": "^4.17.21",
 		"mongodb": "^4.5.0",
+		"pg": "^8.7.3",
 		"zod": "^3.14.4"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",
 		"@types/lodash": "^4.14.181",
+		"@types/pg": "^8.6.5",
 		"ts-node-dev": "^1.1.8",
 		"typescript": "^4.6.3"
 	}

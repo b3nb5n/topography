@@ -1,5 +1,5 @@
 {
-	"packages": ["client", "server/*", "common/*"],
+	"packages": ["client", "prisma", "server/*", "common/*"],
 	"version": "0.0.0",
 	"npmClient": "yarn",
 	"useWorkspaces": true
