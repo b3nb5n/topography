@@ -1,6 +1,6 @@
 import { idSchema } from '@topography/utils'
 import { Request, Response } from 'express'
-import db from '../prisma'
+import db from '../../prisma'
 
 const getCollections = async (req: Request, res: Response) => {
 	const { propertyId } = req.params

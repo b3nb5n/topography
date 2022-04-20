@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import db from '../../prisma'
+import db from '../../../prisma'
 
 const getCollection = async (req: Request, res: Response) => {
 	const { collectionID } = req.params
