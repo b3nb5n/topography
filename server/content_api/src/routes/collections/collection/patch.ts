@@ -1,22 +1,27 @@
-import { collectionSchema, dataSchema } from '@topography/utils'
-import { Request, Response } from 'express'
-import db from '../../../prisma'
+import { collectionSchema, dataSchema, idSchema } from '@topography/utils'
+import { Handler } from 'express'
+import { Context } from '../../..'
 
-const patchCollection = async (req: Request, res: Response) => {
-	const { collectionId } = req.params
-	if (!collectionId) return res.sendStatus(400)
+const patchCollection = (ctx: Context): Handler => {
+	return async (req, res) => {
+		const idParseResult = idSchema.safeParse(req.params.id)
+		if (!idParseResult.success) return res.sendStatus(400)
+		const id = idParseResult.data
 
-	const parseResult = await dataSchema(collectionSchema)
-		.deepPartial()
-		.safeParseAsync(req.body)
-	if (!parseResult.success) return res.sendStatus(400)
+		const dataParseResult = dataSchema(collectionSchema)
+			.deepPartial()
+			.safeParse(req.body)
+		if (!dataParseResult.success) return res.sendStatus(400)
+		const { data } = dataParseResult
 
-	await db.collection.update({
-		where: { id: collectionId },
-		data: parseResult.data,
-	})
+		try {
+			await ctx.prisma.collection.update({ where: { id }, data })
+		} catch (err) {
+			return res.sendStatus(500)
+		}
 
-	return res.sendStatus(200)
+		return res.sendStatus(200)
+	}
 }
 
 export default patchCollection

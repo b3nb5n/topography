@@ -1,38 +1,34 @@
-import {
-	collectionSchema,
-	dataSchema,
-	idSchema,
-	newCollection,
-	newMeta,
-} from '@topography/utils'
-import { Request, Response } from 'express'
-import db from '../../prisma'
+import { collectionSchema, dataSchema, newMeta } from '@topography/utils'
+import { Handler } from 'express'
+import { uid } from 'uid'
+import { Context } from '../..'
 
-const postCollection = async (req: Request, res: Response) => {
-	const { propertyId } = req.params
-	if (!idSchema.safeParse(propertyId).success) return res.sendStatus(400)
+const postCollection = (ctx: Context): Handler => {
+	return async (req, res) => {
+		const parseResult = await dataSchema(collectionSchema).safeParse(req.body)
+		if (!parseResult.success) return res.sendStatus(400)
+		const { data } = parseResult
 
-	const parseResult = await dataSchema(collectionSchema).safeParseAsync(req.body)
-	if (!parseResult.success) return res.sendStatus(400)
-	if (parseResult.data.propertyId !== propertyId) return res.sendStatus(400)
+		// TODO: authenticate request sender
 
-	// TODO: authenticate request sender
+		const id = uid(16)
+		const meta = newMeta({ id, type: 'Collection' })
 
-	const collection = newCollection(parseResult.data)
-	const meta = newMeta({ id: collection.metaId, type: 'Collection' })
+		try {
+			await ctx.prisma.collection.create({
+				data: {
+					id,
+					meta: { create: meta },
+					property: { connect: { id: data.propertyId } },
+					schema: data.schema ?? {},
+				},
+			})
+		} catch (err) {
+			return res.sendStatus(500)
+		}
 
-	await db.collection.create({
-		data: {
-			id: collection.id,
-			meta: { create: meta },
-			property: { connect: { id: collection.propertyId } },
-			schema: collection.schema ?? {},
-		},
-	})
-
-	return res.status(201).send({
-		resource: { id: collection.id },
-	})
-}
+		return res.status(201).send({ resource: { id } })
+	}
+} 
 
 export default postCollection

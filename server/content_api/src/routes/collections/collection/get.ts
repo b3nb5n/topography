@@ -1,16 +1,21 @@
-import { Request, Response } from 'express'
-import db from '../../../prisma'
+import { idSchema } from '@topography/utils'
+import { Handler } from 'express'
+import { Context } from '../../..'
 
-const getCollection = async (req: Request, res: Response) => {
-	const { collectionID } = req.params
-	if (!collectionID) return res.sendStatus(400)
+const getCollection = (ctx: Context): Handler => {
+	return async (req, res) => {
+		const parseResult = idSchema.safeParse(req.params.id)
+		if (!parseResult.success) return res.sendStatus(400)
+		const id = parseResult.data
 
-	const collection = await db.collection.findUnique({
-		where: { id: collectionID },
-	})
-
-	if (!collection) return res.sendStatus(404)
-	return res.send({ data: collection })
+		try {
+			const collection = await ctx.prisma.collection.findUnique({ where: { id } })
+			if (!collection) return res.sendStatus(404)
+			return res.status(200).send({ resource: collection })
+		} catch (err) {
+			return res.sendStatus(500)
+		}
+	}
 }
 
 export default getCollection

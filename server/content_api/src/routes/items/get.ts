@@ -1,12 +1,14 @@
-import { Request, Response } from 'express'
-import db from '../../prisma'
+import { Handler } from 'express'
+import { Context } from '../..'
 
-const getItems = async (_req: Request, res: Response) => {
-	try {
-		const items = await db.item.findMany()
-		return res.status(200).send({ resources: items })
-	} catch (err) {
-		return res.sendStatus(500)
+const getItems = (ctx: Context): Handler => {
+	return async (_req, res) => {
+		try {
+			const items = await ctx.prisma.item.findMany()
+			return res.status(200).send({ resources: items })
+		} catch (err) {
+			return res.sendStatus(500)
+		}
 	}
 }
 

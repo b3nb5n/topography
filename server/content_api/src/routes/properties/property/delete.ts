@@ -1,21 +1,23 @@
 import { idSchema } from '@topography/utils'
-import { Request, Response } from 'express'
-import db from '../../../prisma'
+import { Handler } from 'express'
+import { Context } from '../../..'
 
-const deleteProperty = async (req: Request, res: Response) => {
-	const parseResult = idSchema.safeParse(req.params.id)
-	if (!parseResult.success) return res.sendStatus(400)
-	const id = parseResult.data
+const deleteProperty = (ctx: Context): Handler => {
+	return async (req, res) => {
+		const parseResult = idSchema.safeParse(req.params.id)
+		if (!parseResult.success) return res.sendStatus(400)
+		const id = parseResult.data
 
-	// TODO: Authenticate request
+		// TODO: Authenticate request
 
-	try {
-		await db.property.delete({ where: { id } })
-	} catch (err) {
-		return res.sendStatus(500)
+		try {
+			await ctx.prisma.property.delete({ where: { id } })
+		} catch (err) {
+			return res.sendStatus(500)
+		}
+
+		return res.sendStatus(200)
 	}
-
-	return res.sendStatus(200)
 }
 
 export default deleteProperty

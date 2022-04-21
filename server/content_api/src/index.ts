@@ -1,6 +1,11 @@
+import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import db from './prisma'
 import router from './routes'
+
+export interface Context {
+	prisma: PrismaClient
+}
 
 const PORT = process.env.PORT ?? 8080
 const app = express()

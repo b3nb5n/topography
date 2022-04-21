@@ -1,17 +1,19 @@
 import { idSchema } from '@topography/utils'
-import { Request, Response } from 'express'
-import db from '../../../prisma'
+import { Handler } from 'express'
+import { Context } from '../../..'
 
-const getProperty = async (req: Request, res: Response) => {
-	const parseResult = idSchema.safeParse(req.params.id)
-	if (!parseResult.success) return res.sendStatus(400)
-	const id = parseResult.data
+const getProperty = (ctx: Context): Handler => {
+	return async (req, res) => {
+		const parseResult = idSchema.safeParse(req.params.id)
+		if (!parseResult.success) return res.sendStatus(400)
+		const id = parseResult.data
 
-	try {
-		const property = await db.property.findUnique({ where: { id } })
-		return res.status(200).send({ resource: property })
-	} catch (err) {
-		return res.sendStatus(500)
+		try {
+			const property = await ctx.prisma.property.findUnique({ where: { id } })
+			return res.status(200).send({ resource: property })
+		} catch (err) {
+			return res.sendStatus(500)
+		}
 	}
 }
 

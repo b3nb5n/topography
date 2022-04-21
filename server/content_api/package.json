@@ -4,25 +4,28 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc -p build.tsconfig.json",
 		"build:watch": "tsc -w",
-		"dev": "ts-node-dev --respawn src/index.ts"
+		"dev": "ts-node-dev --respawn src/index.ts",
+		"test": "jest -i --root tests"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.12.0",
 		"@topography/utils": "workspace:^",
 		"express": "^4.17.3",
 		"json-schema-to-zod": "^0.0.0-beta.0",
-		"lodash": "^4.17.21",
-		"mongodb": "^4.5.0",
 		"pg": "^8.7.3",
 		"uid": "^2.0.0",
 		"zod": "^3.14.4"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",
-		"@types/lodash": "^4.14.181",
+		"@types/jest": "^27.4.1",
+		"@types/node": "^17.0.25",
 		"@types/pg": "^8.6.5",
+		"jest": "^27.5.1",
+		"jest-mock-extended": "2.0.4",
+		"ts-jest": "^27.1.4",
 		"ts-node-dev": "^1.1.8",
 		"typescript": "^4.6.3"
 	}
