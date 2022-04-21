@@ -1,6 +1,6 @@
 import { dataSchema, idSchema, itemSchema } from '@topography/utils'
 import { Handler } from 'express'
-import { Context } from '../../..'
+import { Context } from '../..'
 
 const patchItem = (ctx: Context): Handler => {
 	return async (req, res) => {

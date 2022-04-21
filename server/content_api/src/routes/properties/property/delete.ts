@@ -1,6 +1,6 @@
 import { idSchema } from '@topography/utils'
 import { Handler } from 'express'
-import { Context } from '../../..'
+import { Context } from '../..'
 
 const deleteProperty = (ctx: Context): Handler => {
 	return async (req, res) => {

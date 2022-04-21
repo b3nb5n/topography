@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { context } from '..'
 import getItems from './get'
 import deleteItem from './item/delete'
 import getItem from './item/get'
@@ -7,10 +8,10 @@ import postItem from './post'
 
 const itemsRouter = Router()
 
-itemsRouter.get('/', getItems)
-itemsRouter.post('/', postItem)
-itemsRouter.get('/:id', getItem)
-itemsRouter.patch('/:id', patchItem)
-itemsRouter.delete('/:id', deleteItem)
+itemsRouter.get('/', getItems(context))
+itemsRouter.post('/', postItem(context))
+itemsRouter.get('/:id', getItem(context))
+itemsRouter.patch('/:id', patchItem(context))
+itemsRouter.delete('/:id', deleteItem(context))
 
 export default itemsRouter

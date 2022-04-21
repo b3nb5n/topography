@@ -1,7 +1,7 @@
 import { dataSchema, newMeta, propertySchema } from '@topography/utils'
 import { Handler } from 'express'
 import { uid } from 'uid'
-import { Context } from '../..'
+import { Context } from '..'
 
 const postProperty = (ctx: Context): Handler => {
 	return async (req, res) => {

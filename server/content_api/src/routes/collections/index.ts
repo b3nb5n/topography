@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { context } from '..'
 import deleteCollection from './collection/delete'
 import getCollection from './collection/get'
 import patchCollection from './collection/patch'
@@ -7,10 +8,10 @@ import postCollection from './post'
 
 const collectionsRouter = Router()
 
-collectionsRouter.get('/', getCollections)
-collectionsRouter.post('/', postCollection)
-collectionsRouter.get('/:id', getCollection)
-collectionsRouter.patch('/:id', patchCollection)
-collectionsRouter.delete('/:id', deleteCollection)
+collectionsRouter.get('/', getCollections(context))
+collectionsRouter.post('/', postCollection(context))
+collectionsRouter.get('/:id', getCollection(context))
+collectionsRouter.patch('/:id', patchCollection(context))
+collectionsRouter.delete('/:id', deleteCollection(context))
 
 export default collectionsRouter
