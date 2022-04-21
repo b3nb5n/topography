@@ -11,7 +11,8 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^3.12.0",
-		"@topography/utils": "workspace:^",
+		"@topography/comm": "workspace:^",
+		"@topography/schema": "workspace:^",
 		"express": "^4.17.3",
 		"json-schema-to-zod": "^0.0.0-beta.0",
 		"pg": "^8.7.3",

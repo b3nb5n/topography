@@ -1,11 +1,13 @@
-import { collectionSchema, dataSchema, newMeta } from '@topography/utils'
+import { dataSchema } from '@topography/comm'
+import { collectionSchema } from '@topography/schema'
 import { Handler } from 'express'
 import { uid } from 'uid'
 import { Context } from '..'
+import newMeta from '../../utils/new-meta'
 
 const postCollection = (ctx: Context): Handler => {
 	return async (req, res) => {
-		const parseResult = await dataSchema(collectionSchema).safeParse(req.body)
+		const parseResult = dataSchema(collectionSchema).safeParse(req.body)
 		if (!parseResult.success) return res.sendStatus(400)
 		const { data } = parseResult
 
@@ -29,6 +31,6 @@ const postCollection = (ctx: Context): Handler => {
 
 		return res.status(201).send({ resource: { id } })
 	}
-} 
+}
 
 export default postCollection

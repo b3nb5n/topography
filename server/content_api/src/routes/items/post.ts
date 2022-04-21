@@ -1,7 +1,9 @@
-import { dataSchema, itemSchema, newMeta } from '@topography/utils'
+import { dataSchema } from '@topography/comm'
+import { itemSchema } from '@topography/schema'
 import { Handler } from 'express'
 import { uid } from 'uid'
 import { Context } from '..'
+import newMeta from '../../utils/new-meta'
 
 const postItem = (ctx: Context): Handler => {
 	return async (req, res) => {
@@ -28,5 +30,5 @@ const postItem = (ctx: Context): Handler => {
 
 		return res.status(201).send({ resource: { id } })
 	}
-} 
+}
 export default postItem

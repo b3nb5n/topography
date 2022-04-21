@@ -5,6 +5,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider      = "zod-prisma"
+  output        = "./generated/schema"
+  relationModel = false
+  modelCase     = "camelCase"
+  modelSuffix   = "Schema"
+  useDecimalJs  = true
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -13,27 +22,27 @@ datasource db {
 // Authentication
 
 model Role {
-  id String @id @db.Char(16)
-  name String @unique
+  id          String       @id @db.Char(16)
+  name        String       @unique
   invitations Invitation[]
-  users User[]
+  users       User[]
 }
 
 model Invitation {
-  id String @id @db.Char(16)
-  email String
-  role Role @relation(fields: [roleId], references: [id])
+  id     String @id @db.Char(16)
+  email  String
+  role   Role   @relation(fields: [roleId], references: [id])
   roleId String @db.Char(16)
 }
 
 model User {
-  id String @id @db.Char(16)
-  role Role @relation(fields: [roleId], references: [id])
-  roleId String @db.Char(16)
+  id        String @id @db.Char(16)
+  role      Role   @relation(fields: [roleId], references: [id])
+  roleId    String @db.Char(16)
   firstName String
-  lastName String
-  email String
-  password String
+  lastName  String
+  email     String
+  password  String
 }
 
 // Content
@@ -76,7 +85,7 @@ model Collection {
   metaId     String   @unique @db.Char(16)
   property   Property @relation(fields: [propertyId], references: [id])
   propertyId String   @db.Char(16)
-  schema     Json @db.Json
+  schema     Json     @db.Json
   items      Item[]
 }
 

@@ -9,7 +9,7 @@
 		"dev": "ts-node-dev --respawn src/index.ts"
 	},
 	"dependencies": {
-		"@topography/utils": "workspace:^",
+		"@topography/schema": "workspace:^",
 		"express": "^4.17.3",
 		"uid": "^2.0.0"
 	},

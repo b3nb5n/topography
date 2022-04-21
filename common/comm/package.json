@@ -1,5 +1,5 @@
 {
-	"name": "@topography/utils",
+	"name": "@topography/comm",
 	"version": "0.1.0",
 	"license": "MIT",
 	"private": true,

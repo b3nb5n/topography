@@ -1,12 +1,12 @@
-import { dataSchema, idSchema, itemSchema } from '@topography/utils'
+import { dataSchema } from '@topography/comm'
+import { itemSchema } from '@topography/schema'
 import { Handler } from 'express'
 import { Context } from '../..'
 
 const patchItem = (ctx: Context): Handler => {
 	return async (req, res) => {
-		const idParseResult = idSchema.safeParse(req.params.id)
-		if (!idParseResult.success) return res.sendStatus(400)
-		const id = idParseResult.data
+		const { id } = req.params
+		if (!id) return res.sendStatus(400)
 
 		const dataParseResult = dataSchema(itemSchema).deepPartial().safeParse(req.body)
 		if (!dataParseResult.success) return res.sendStatus(400)

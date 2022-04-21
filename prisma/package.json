@@ -1,13 +1,20 @@
 {
-	"name": "@topography/prisma",
+	"name": "@topography/schema",
 	"packageManager": "yarn@3.2.0",
 	"private": true,
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"dev": "prisma generate --watch",
-		"build": "prisma generate",
-		"format": "prisma format"
+		"generate": "prisma generate",
+		"format": "prisma format",
+		"build": "tsc"
 	},
 	"devDependencies": {
-		"prisma": "^3.12.0"
+		"prisma": "^3.12.0",
+		"zod-prisma": "^0.5.4"
+	},
+	"dependencies": {
+		"zod": "^3.14.4"
 	}
 }
