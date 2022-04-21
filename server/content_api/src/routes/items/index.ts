@@ -1,17 +1,21 @@
 import { Router } from 'express'
-import { context } from '..'
+import { Context } from '../..'
 import getItems from './get'
 import deleteItem from './item/delete'
 import getItem from './item/get'
 import patchItem from './item/patch'
 import postItem from './post'
 
-const itemsRouter = Router()
+const itemsRouter = (ctx: Context) => {
+	const router = Router()
 
-itemsRouter.get('/', getItems(context))
-itemsRouter.post('/', postItem(context))
-itemsRouter.get('/:id', getItem(context))
-itemsRouter.patch('/:id', patchItem(context))
-itemsRouter.delete('/:id', deleteItem(context))
+	router.get('/', getItems(ctx))
+	router.post('/', postItem(ctx))
+	router.get('/:id', getItem(ctx))
+	router.patch('/:id', patchItem(ctx))
+	router.delete('/:id', deleteItem(ctx))
+
+	return router
+}
 
 export default itemsRouter

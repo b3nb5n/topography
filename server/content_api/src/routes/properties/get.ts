@@ -1,5 +1,5 @@
 import { Handler } from 'express'
-import { Context } from '..'
+import { Context } from '../..'
 
 const getProperties = (ctx: Context): Handler => {
 	return async (_req, res) => {
@@ -7,9 +7,9 @@ const getProperties = (ctx: Context): Handler => {
 
 		try {
 			const properties = await ctx.prisma.property.findMany()
-			return res.status(200).send({ resources: properties })
+			return res.status(200).send(properties)
 		} catch (err) {
-			return res.sendStatus(500)
+			return res.status(500).send(err)
 		}
 	}
 }

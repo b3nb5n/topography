@@ -8,6 +8,7 @@
 		"dev": "prisma generate --watch",
 		"generate": "prisma generate",
 		"format": "prisma format",
+		"migrate": "prisma migrate dev",
 		"build": "tsc"
 	},
 	"devDependencies": {

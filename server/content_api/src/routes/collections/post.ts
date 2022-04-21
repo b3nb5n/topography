@@ -2,7 +2,7 @@ import { dataSchema } from '@topography/comm'
 import { collectionSchema } from '@topography/schema'
 import { Handler } from 'express'
 import { uid } from 'uid'
-import { Context } from '..'
+import { Context } from '../..'
 import newMeta from '../../utils/new-meta'
 
 const postCollection = (ctx: Context): Handler => {

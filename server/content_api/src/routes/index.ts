@@ -1,23 +1,20 @@
-import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
+import { Context } from '..'
 import validateResourceIdHandler from '../middleware/validate-resource-id'
 import collectionsRouter from './collections'
 import itemsRouter from './items'
 import propertiesRouter from './properties'
 
-export interface Context {
-	prisma: PrismaClient
+const router = (ctx: Context) => {
+	const router = Router()
+
+	router.use('/properties', propertiesRouter(ctx))
+	router.use('/collections', collectionsRouter(ctx))
+	router.use('/items', itemsRouter(ctx))
+
+	router.use('/*/:id', validateResourceIdHandler)
+
+	return router
 }
-
-const router = Router()
-export const context: Context = {
-	prisma: new PrismaClient(),
-}
-
-router.use('/properties', propertiesRouter)
-router.use('/collections', collectionsRouter)
-router.use('/items', itemsRouter)
-
-router.use('/*/:id', validateResourceIdHandler)
 
 export default router

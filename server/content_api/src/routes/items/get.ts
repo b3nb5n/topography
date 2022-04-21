@@ -1,5 +1,5 @@
 import { Handler } from 'express'
-import { Context } from '..'
+import { Context } from '../..'
 
 const getItems = (ctx: Context): Handler => {
 	return async (_req, res) => {

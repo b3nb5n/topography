@@ -5,18 +5,17 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc -p build.tsconfig.json",
-		"build:watch": "tsc -w",
-		"dev": "ts-node-dev --respawn src/index.ts",
+		"build:watch": "tsc -p build.tsconfig.json",
+		"dev": "ts-node-dev --respawn --exit-child src/index.ts",
 		"test": "jest -i --root tests"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.12.0",
 		"@topography/comm": "workspace:^",
 		"@topography/schema": "workspace:^",
-		"concurrently": "^7.1.0",
+		"body-parser": "^1.20.0",
 		"express": "^4.17.3",
 		"json-schema-to-zod": "^0.0.0-beta.0",
-		"pg": "^8.7.3",
 		"uid": "^2.0.0",
 		"zod": "^3.14.4"
 	},

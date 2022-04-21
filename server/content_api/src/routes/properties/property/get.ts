@@ -1,5 +1,5 @@
 import { Handler } from 'express'
-import { Context } from '../..'
+import { Context } from '../../..'
 
 const getProperty = (ctx: Context): Handler => {
 	return async (req, res) => {

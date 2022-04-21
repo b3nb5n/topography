@@ -1,7 +1,7 @@
 import { dataSchema } from '@topography/comm'
 import { collectionSchema } from '@topography/schema'
 import { Handler } from 'express'
-import { Context } from '../..'
+import { Context } from '../../..'
 
 const patchCollection = (ctx: Context): Handler => {
 	return async (req, res) => {
