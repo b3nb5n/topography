@@ -1,5 +1,8 @@
 import express from 'express'
+import router from './routes'
 
-const PORT = 5500
 const app = express()
-app.listen(PORT, () => console.log(`Content API running on port ${PORT}`))
+app.use('/', router)
+
+const PORT = process.env.PORT ?? 5500
+app.listen(PORT, () => console.log(`Auth API running on port ${PORT}`))

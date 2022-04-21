@@ -1,1 +1,2 @@
-export * from './resource'
+export * from './auth'
+export * from './content'

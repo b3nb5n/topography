@@ -10,6 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Authentication
+
+model Role {
+  id String @id @db.Char(16)
+  name String @unique
+  invitations Invitation[]
+  users User[]
+}
+
+model Invitation {
+  id String @id @db.Char(16)
+  email String
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String @db.Char(16)
+}
+
+model User {
+  id String @id @db.Char(16)
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String @db.Char(16)
+  firstName String
+  lastName String
+  email String
+  password String
+}
+
+// Content
+
 enum ResourceType {
   Property
   Collection
