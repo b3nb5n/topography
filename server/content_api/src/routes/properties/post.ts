@@ -7,8 +7,9 @@ import newMeta from '../../utils/new-meta'
 
 const postProperty = (ctx: Context): Handler => {
 	return async (req, res) => {
+		console.log('creating property:', req.body)
 		const parseResult = dataSchema(propertySchema).safeParse(req.body)
-		if (!parseResult.success) return res.send(400)
+		if (!parseResult.success) return res.status(400).send(parseResult.error)
 		const { data } = parseResult
 
 		// TODO: Authenticate request

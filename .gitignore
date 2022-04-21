@@ -22,3 +22,6 @@ dist
 # Yarn
 .yarn/cache
 .yarn/install-state.gz
+
+# HTTP client
+thunder-tests
