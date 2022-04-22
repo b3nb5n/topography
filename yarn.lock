@@ -1579,6 +1579,7 @@ __metadata:
   resolution: "@topography/schema@workspace:prisma"
   dependencies:
     prisma: ^3.12.0
+    tsup: ^5.12.6
     zod: ^3.14.4
     zod-prisma: ^0.5.4
   languageName: unknown
