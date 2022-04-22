@@ -13,7 +13,7 @@ export type PostItemResponse = Response<PostItemResponseData>
 
 const postItem = (ctx: Context): RequestHandler<{}, PostItemResponse> => {
 	return async (req, res) => {
-		const parseResult = await dataSchema(itemSchema).safeParseAsync(req.body)
+		const parseResult = dataSchema(itemSchema).safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

@@ -1,13 +1,17 @@
 import { Router } from 'express'
-import { context } from '..'
+import { Context } from '../..'
 import getInvitations from './get'
 import acceptInvitation from './invitation/accept'
 import postInvitation from './post'
 
-const collectionsRouter = Router()
+const invitationsRouter = (ctx: Context) => {
+	const router = Router()
 
-collectionsRouter.get('/', getInvitations(context))
-collectionsRouter.post('/', postInvitation(context))
-collectionsRouter.post('/:id', acceptInvitation(context))
+	router.get('/', getInvitations(ctx))
+	router.post('/', postInvitation(ctx))
+	router.post('/:id/accept', acceptInvitation(ctx))
 
-export default collectionsRouter
+	return router
+}
+
+export default invitationsRouter

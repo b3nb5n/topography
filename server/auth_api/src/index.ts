@@ -1,5 +1,11 @@
+import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import router from './routes'
+
+export interface Context {
+	prisma: PrismaClient
+	jwtSecret: string
+}
 
 const app = express()
 app.use('/', router)

@@ -20,6 +20,8 @@ const postCollection = (
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
 
+		// TODO: validate item schema
+
 		// TODO: authenticate request sender
 
 		try {

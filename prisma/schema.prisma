@@ -41,7 +41,7 @@ model User {
   roleId    String @db.Char(16)
   firstName String
   lastName  String
-  email     String
+  email     String @unique
   password  String
 }
 

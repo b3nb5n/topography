@@ -1,5 +1,5 @@
 {
-	"name": "@topography/comm",
+	"name": "@topography/utils",
 	"packageManager": "yarn@3.2.0",
 	"version": "0.1.0",
 	"license": "MIT",
@@ -28,7 +28,6 @@
 		"zod": "^3.14.4"
 	},
 	"devDependencies": {
-		"tsup": "^5.12.6",
-		"typescript": "^4.6.3"
+		"tsup": "^5.12.6"
 	}
 }

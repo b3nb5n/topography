@@ -1,13 +1,15 @@
-import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
+import { Context } from '..'
+import invitationsRouter from './invitations'
+import signin from './signin'
 
-export interface Context {
-	prisma: PrismaClient
-}
+const router = (ctx: Context) => {
+	const router = Router()
 
-const router = Router()
-export const context: Context = {
-	prisma: new PrismaClient(),
+	router.use('/', invitationsRouter)
+	router.post('/signin', signin(ctx))
+
+	return router
 }
 
 export default router

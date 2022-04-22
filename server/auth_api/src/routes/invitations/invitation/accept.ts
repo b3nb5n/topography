@@ -1,12 +1,21 @@
-import { idSchema } from '@topography/utils'
-import { Handler } from 'express'
-import { Context } from '../..'
+import { Response } from '@topography/comm'
+import { RequestHandler } from 'express'
+import { Context } from '../../..'
 
-export const acceptInvitation = (ctx: Context): Handler => {
+export type AcceptInvitationResponseData = undefined
+
+export type AcceptInvitationResponse = Response<AcceptInvitationResponseData>
+
+interface AcceptInvitationParams {
+	id: string
+}
+
+export const acceptInvitation = (
+	ctx: Context
+): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
-		const parseResult = idSchema.safeParse(req.params.id)
-		if (!parseResult.success) return res.sendStatus(400)
-		const id = parseResult.data
+		const { id } = req.params
+		if (!id) return res.status(400).send({})
 
 		try {
 			const invitation = await ctx.prisma.invitation.findUnique({ where: { id } })
