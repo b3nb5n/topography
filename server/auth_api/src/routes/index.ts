@@ -6,7 +6,7 @@ import signin from './signin'
 const router = (ctx: Context) => {
 	const router = Router()
 
-	router.use('/', invitationsRouter)
+	router.use('/invitations', invitationsRouter(ctx))
 	router.post('/signin', signin(ctx))
 
 	return router

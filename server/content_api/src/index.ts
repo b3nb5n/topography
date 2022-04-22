@@ -15,6 +15,7 @@ app.use('/', router(globalCtx))
 
 const main = async () => {
 	await globalCtx.prisma.$connect()
+
 	const PORT = process.env.PORT ?? 8080
 	app.listen(PORT, () => console.log(`Content API running on port ${PORT}`))
 }

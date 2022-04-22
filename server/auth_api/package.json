@@ -1,24 +1,30 @@
 {
 	"name": "@topography/auth_api",
-	"version": "1.0.0",
-	"main": "index.js",
+	"version": "0.1.0",
+	"main": "dist/index.js",
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc",
 		"build:watch": "tsc -w",
-		"dev": "ts-node-dev --respawn src/index.ts"
+		"dev": "ts-node-dev --respawn --exit-child src/index.ts"
 	},
 	"dependencies": {
 		"@topography/comm": "workspace:^",
 		"@topography/schema": "workspace:^",
+		"@topography/utils": "workspace:^",
 		"@types/bcrypt": "^5.0.0",
 		"bcrypt": "^5.0.1",
+		"body": "^5.1.0",
+		"body-parser": "^1.20.0",
+		"cookie-parser": "^1.4.6",
 		"express": "^4.17.3",
 		"jsonwebtoken": "^8.5.1",
+		"parser": "^0.1.4",
 		"uid": "^2.0.0",
 		"zod": "^3.14.4"
 	},
 	"devDependencies": {
+		"@types/cookie-parser": "^1.4.2",
 		"@types/express": "^4.17.13",
 		"@types/jsonwebtoken": "^8.5.8",
 		"ts-node-dev": "^1.1.8",

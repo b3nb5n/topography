@@ -3,7 +3,8 @@ import * as bcrypt from 'bcrypt'
 import { RequestHandler } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { z } from 'zod'
-import { Context, Payload } from '..'
+import { Context } from '..'
+import { Payload } from '../utils/payload'
 
 export const signinBodySchema = z.object({
 	email: z.string().email(),
