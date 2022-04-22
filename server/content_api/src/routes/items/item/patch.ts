@@ -1,9 +1,19 @@
-import { dataSchema } from '@topography/comm'
+import { dataSchema, Response } from '@topography/comm'
 import { itemSchema } from '@topography/schema'
-import { Handler } from 'express'
+import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-const patchItem = (ctx: Context): Handler => {
+export interface PatchItemResponseData {}
+
+export type PatchItemResponse = Response<PatchItemResponseData>
+
+interface PatchItemParams {
+	id: string
+}
+
+const patchItem = (
+	ctx: Context
+): RequestHandler<PatchItemParams, PatchItemResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
 		if (!id) return res.sendStatus(400)

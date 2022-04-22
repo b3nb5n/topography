@@ -1,14 +1,21 @@
-import { dataSchema } from '@topography/comm'
+import { dataSchema, Response } from '@topography/comm'
 import { propertySchema } from '@topography/schema'
-import { Handler } from 'express'
+import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
 import newMeta from '../../utils/new-meta'
 
-const postProperty = (ctx: Context): Handler => {
+export interface PostPropertyResponseData {
+	id: string
+}
+
+export type PostPropertyResponse = Response<PostPropertyResponseData>
+
+const postProperty = (ctx: Context): RequestHandler<{}, PostPropertyResponse> => {
 	return async (req, res) => {
 		const parseResult = dataSchema(propertySchema).safeParse(req.body)
-		if (!parseResult.success) return res.status(400).send(parseResult.error)
+		if (!parseResult.success)
+			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
 
 		// TODO: Authenticate request
@@ -20,9 +27,9 @@ const postProperty = (ctx: Context): Handler => {
 				data: { id, meta: { create: meta }, ...data },
 			})
 
-			return res.status(201).send({ resource: { id } })
-		} catch (err) {
-			return res.status(500).send(err)
+			return res.status(201).send({ data: { id } })
+		} catch (error) {
+			return res.status(500).send({ error })
 		}
 	}
 }

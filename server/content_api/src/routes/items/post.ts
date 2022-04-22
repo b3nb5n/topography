@@ -1,22 +1,28 @@
-import { dataSchema } from '@topography/comm'
+import { dataSchema, errors, Response } from '@topography/comm'
 import { itemSchema } from '@topography/schema'
-import { Handler } from 'express'
+import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
 import newMeta from '../../utils/new-meta'
 
-const postItem = (ctx: Context): Handler => {
+export interface PostItemResponseData {
+	id: string
+}
+
+export type PostItemResponse = Response<PostItemResponseData>
+
+const postItem = (ctx: Context): RequestHandler<{}, PostItemResponse> => {
 	return async (req, res) => {
 		const parseResult = await dataSchema(itemSchema).safeParseAsync(req.body)
-		if (!parseResult.success) return res.sendStatus(400)
+		if (!parseResult.success)
+			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
 
 		// TODO: Authenticate request
 
-		const id = uid(16)
-		const meta = newMeta({ id, type: 'Item' })
-
 		try {
+			const id = uid(16)
+			const meta = newMeta({ id, type: 'Item' })
 			await ctx.prisma.item.create({
 				data: {
 					id,
@@ -24,11 +30,11 @@ const postItem = (ctx: Context): Handler => {
 					collection: { connect: { id: data.collectionId } },
 				},
 			})
-		} catch (err) {
-			return res.sendStatus(500)
-		}
 
-		return res.status(201).send({ resource: { id } })
+			return res.status(201).send({ data: { id } })
+		} catch (err) {
+			return res.status(500).send({ error: errors.UNKNOWN })
+		}
 	}
 }
 export default postItem

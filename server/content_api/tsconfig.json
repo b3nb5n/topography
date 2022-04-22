@@ -3,7 +3,12 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "ESNext",
-    "noEmit": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "esModuleInterop": true,
   },
   "include": [
     "src",

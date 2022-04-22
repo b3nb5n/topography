@@ -1,16 +1,29 @@
-import { Handler } from 'express'
+import { Property } from '@prisma/client'
+import { errors, Response } from '@topography/comm'
+import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-const getProperty = (ctx: Context): Handler => {
+export type GetPropertyResponseData = Property
+
+export type GetPropertyRepsponse = Response<GetPropertyResponseData>
+
+interface GetPropertyParams {
+	id: string
+}
+
+const getProperty = (
+	ctx: Context
+): RequestHandler<GetPropertyParams, GetPropertyRepsponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		if (!id) return res.sendStatus(400)
+		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
 
 		try {
-			const property = await ctx.prisma.property.findUnique({ where: { id } })
-			return res.status(200).send({ resource: property })
+			const data = await ctx.prisma.property.findUnique({ where: { id } })
+			if (!data) return res.status(404).send({ error: errors.NOT_FOUND })
+			return res.status(200).send({ data })
 		} catch (err) {
-			return res.sendStatus(500)
+			return res.status(500).send({ error: errors.UNKNOWN })
 		}
 	}
 }

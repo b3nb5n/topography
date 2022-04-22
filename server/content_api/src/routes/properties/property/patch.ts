@@ -1,17 +1,28 @@
-import { dataSchema } from '@topography/comm'
+import { dataSchema, errors, Response } from '@topography/comm'
 import { propertySchema } from '@topography/schema'
-import { Handler } from 'express'
+import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-const patchProperty = (ctx: Context): Handler => {
+export interface PatchPropertyResponseData {}
+
+export type PatchPropertyResponse = Response<PatchPropertyResponseData>
+
+interface PatchPropertyParams {
+	id: string
+}
+
+const patchProperty = (
+	ctx: Context
+): RequestHandler<PatchPropertyParams, PatchPropertyResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		if (!id) return res.sendStatus(400)
+		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
 
 		const dataParseResult = dataSchema(propertySchema)
 			.deepPartial()
 			.safeParse(req.body)
-		if (!dataParseResult.success) return res.sendStatus(400)
+		if (!dataParseResult.success)
+			return res.status(400).send({ error: dataParseResult.error })
 		const { data } = dataParseResult
 
 		// TODO: Authenticate request
