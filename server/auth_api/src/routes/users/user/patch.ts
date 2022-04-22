@@ -1,5 +1,5 @@
 import { errors, Response } from '@topography/comm'
-import { userSchema } from '@topography/schema'
+import { userDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
@@ -17,7 +17,7 @@ const patchUser = (
 		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
 
 		// TODO: filter data
-		const parseResult = userSchema.deepPartial().safeParse(req.body)
+		const parseResult = userDataSchema.partial().safeParse(req.body)
 		if (!parseResult.success) return res.sendStatus(400)
 		const { data } = parseResult
 

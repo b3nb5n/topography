@@ -13,7 +13,7 @@ export const errorResponseSchema = z.object({
 
 export type ErrorResponse = z.TypeOf<typeof errorResponseSchema>
 
-export type Response<T> = SuccessResponse<T> | ErrorResponse
+export type Response<T = undefined> = SuccessResponse<T> | ErrorResponse
 
 export const responseSchema = <T extends z.ZodTypeAny>(schema: T) =>
 	z.union([successResponseSchema(schema), errorResponseSchema])

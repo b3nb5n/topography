@@ -1,5 +1,5 @@
-import { dataSchema, Response } from '@topography/comm'
-import { invitationSchema } from '@topography/schema'
+import { Response } from '@topography/comm'
+import { invitationDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
@@ -14,7 +14,7 @@ export const postInvitation = (
 	ctx: Context
 ): RequestHandler<{}, PostInvitationResponse> => {
 	return async (req, res) => {
-		const parseResult = dataSchema(invitationSchema).safeParse(req.body)
+		const parseResult = invitationDataSchema.safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

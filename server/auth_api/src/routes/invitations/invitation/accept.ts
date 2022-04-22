@@ -1,10 +1,10 @@
-import { Response } from '@topography/comm'
+import { errors, Response } from '@topography/comm'
+import { UserData, userDataSchema } from '@topography/schema'
+import { hash } from 'bcrypt'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-export type AcceptInvitationResponseData = undefined
-
-export type AcceptInvitationResponse = Response<AcceptInvitationResponseData>
+export type AcceptInvitationResponse = Response<UserData>
 
 interface AcceptInvitationParams {
 	id: string
@@ -15,21 +15,27 @@ export const acceptInvitation = (
 ): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		if (!id) return res.status(400).send({})
+		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
+
+		const parseResult = userDataSchema.omit({ roleId: true }).safeParse(req.body)
+		if (!parseResult.success)
+			return res.status(400).send({ error: parseResult.error })
+		const { data } = parseResult
 
 		try {
 			const invitation = await ctx.prisma.invitation.findUnique({ where: { id } })
-			if (!invitation) return res.sendStatus(404)
+			if (!invitation) return res.status(404).send({ error: errors.NOT_FOUND })
 
-			const [_, user] = await ctx.prisma.$transaction([
+			const hashedPassword = await hash(data.password, 6)
+
+			ctx.prisma.$transaction([
 				ctx.prisma.invitation.delete({ where: { id } }),
 				ctx.prisma.user.create({
 					data: {
 						id,
+						...data,
 						email: invitation.email,
-						firstName: '',
-						lastName: '',
-						password: '',
+						password: hashedPassword,
 						role: { connect: { id: invitation.roleId } },
 					},
 				}),

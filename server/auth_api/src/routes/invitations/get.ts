@@ -1,15 +1,21 @@
-import { Handler } from 'express'
+import { Invitation } from '@prisma/client'
+import { Response } from '@topography/comm'
+import { RequestHandler } from 'express'
 import { Context } from '../..'
 
-export const getInvitations = (ctx: Context): Handler => {
+type GetInvitationsResponse = Response<Invitation[]>
+
+export const getInvitations = (
+	ctx: Context
+): RequestHandler<{}, GetInvitationsResponse> => {
 	return async (_req, res) => {
 		// TODO: Authenticate request
 
 		try {
 			const invitations = await ctx.prisma.invitation.findMany()
-			return { resources: invitations }
-		} catch (err) {
-			return res.sendStatus(500)
+			return res.send({ data: invitations })
+		} catch (error) {
+			return res.status(500).send({ error })
 		}
 	}
 }
