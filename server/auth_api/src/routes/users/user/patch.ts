@@ -24,10 +24,11 @@ export const patchUserHandler = (
 		const { id } = req.params
 		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
 
-		// TODO: filter data
 		const parseResult = userDataSchema.partial().safeParse(req.body)
-		if (!parseResult.success) return res.sendStatus(400)
+		if (!parseResult.success)
+			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
+		if (Object.keys.length === 0) res.send({})
 
 		try {
 			return res.send({ data: await updateUser(ctx, id, data) })

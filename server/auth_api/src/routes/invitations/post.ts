@@ -18,7 +18,7 @@ export type PostInvitationResponse = Response<
 	Awaited<ReturnType<typeof createInvitation>>
 >
 
-export const postInvitation = (
+export const postInvitationHandler = (
 	ctx: Context
 ): RequestHandler<{}, PostInvitationResponse> => {
 	return async (req, res) => {
@@ -36,5 +36,3 @@ export const postInvitation = (
 		}
 	}
 }
-
-export default postInvitation

@@ -1,11 +1,16 @@
 import { Router } from 'express'
 import { Context } from '../..'
+import { getRolesHandler } from './get'
 import { postRoleHandler } from './post'
+import { deleteRoleHandler } from './role/delete'
 
 const rolesRouter = (ctx: Context) => {
 	const router = Router()
 
+	router.get('/', getRolesHandler(ctx))
 	router.post('/', postRoleHandler(ctx))
+	router.patch('/:id', postRoleHandler(ctx))
+	router.delete('/:id', deleteRoleHandler(ctx))
 
 	return router
 }

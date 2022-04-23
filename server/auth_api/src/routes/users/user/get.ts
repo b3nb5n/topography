@@ -24,7 +24,7 @@ export const getUserHandler = (
 	return async (req, res) => {
 		let { id } = req.params
 		if (id === 'me') {
-			const parseResult = payloadShema.safeParse(jwt.decode(req.cookies.jwt))
+			const parseResult = payloadShema.safeParse(jwt.decode(req.cookies?.jwt))
 			if (parseResult.success) id = parseResult.data.uid
 		}
 		if (!validateResourceId(id))

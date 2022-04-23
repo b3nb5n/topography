@@ -12,7 +12,7 @@ type GetInvitationsResponse = Response<
 	Awaited<ReturnType<typeof getInvitationsData>>
 >
 
-export const getInvitations = (
+export const getInvitationsHandler = (
 	ctx: Context
 ): RequestHandler<{}, GetInvitationsResponse> => {
 	return async (_req, res) => {
@@ -25,5 +25,3 @@ export const getInvitations = (
 		}
 	}
 }
-
-export default getInvitations

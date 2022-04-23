@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { Context } from '..'
 import invitationsRouter from './invitations'
 import rolesRouter from './roles'
-import signin from './signin'
+import tokenRouter from './token'
 import usersRouter from './users'
 
 const router = (ctx: Context) => {
@@ -11,8 +11,7 @@ const router = (ctx: Context) => {
 	router.use('/invitations', invitationsRouter(ctx))
 	router.use('/users', usersRouter(ctx))
 	router.use('/roles', rolesRouter(ctx))
-
-	router.post('/signin', signin(ctx))
+	router.use('/token', tokenRouter(ctx))
 
 	return router
 }
