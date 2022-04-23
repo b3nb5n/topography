@@ -1,15 +1,16 @@
 import { Router } from 'express'
 import { Context } from '../..'
-import getUsers from './get'
-import getUser from './user/get'
-import patchUser from './user/patch'
+import { getUsersHandler } from './get'
+import { deleteUserHandler } from './user/delete'
+import { patchUserHandler } from './user/patch'
 
 const usersRouter = (ctx: Context) => {
 	const router = Router()
 
-	router.get('/', getUsers(ctx))
-	router.get('/:id', getUser(ctx))
-	router.patch('/:id', patchUser(ctx))
+	router.get('/', getUsersHandler(ctx))
+	router.get('/:id', getUsersHandler(ctx))
+	router.patch('/:id', patchUserHandler(ctx))
+	router.delete('/:id', deleteUserHandler(ctx))
 
 	return router
 }

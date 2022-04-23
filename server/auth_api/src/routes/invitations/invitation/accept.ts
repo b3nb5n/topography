@@ -4,13 +4,36 @@ import { hash } from 'bcrypt'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-export type AcceptInvitationResponse = Response<UserData>
+export const acceptInvitation = async (
+	ctx: Context,
+	id: string,
+	data: UserData
+) => {
+	const hashedPassword = await hash(data.password, 6)
+
+	await ctx.prisma.$transaction([
+		ctx.prisma.invitation.delete({ where: { id } }),
+		ctx.prisma.user.create({
+			data: {
+				id,
+				...data,
+				roleId: undefined,
+				password: hashedPassword,
+				role: { connect: { id: data.roleId } },
+			},
+		}),
+	])
+}
+
+export type AcceptInvitationResponse = Response<
+	Awaited<ReturnType<typeof acceptInvitation>>
+>
 
 interface AcceptInvitationParams {
 	id: string
 }
 
-export const acceptInvitation = (
+export const acceptInvitationHandler = (
 	ctx: Context
 ): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
@@ -26,26 +49,15 @@ export const acceptInvitation = (
 			const invitation = await ctx.prisma.invitation.findUnique({ where: { id } })
 			if (!invitation) return res.status(404).send({ error: errors.NOT_FOUND })
 
-			const hashedPassword = await hash(data.password, 6)
-
-			ctx.prisma.$transaction([
-				ctx.prisma.invitation.delete({ where: { id } }),
-				ctx.prisma.user.create({
-					data: {
-						id,
-						...data,
-						email: invitation.email,
-						password: hashedPassword,
-						role: { connect: { id: invitation.roleId } },
-					},
+			return res.send({
+				data: await acceptInvitation(ctx, id, {
+					...data,
+					email: invitation.email,
+					roleId: invitation.roleId,
 				}),
-			])
-
-			return res.sendStatus(200)
+			})
 		} catch (err) {
 			return res.sendStatus(500)
 		}
 	}
 }
-
-export default acceptInvitation

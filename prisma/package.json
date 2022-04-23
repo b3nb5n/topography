@@ -20,7 +20,8 @@
 	},
 	"scripts": {
 		"build": "prisma generate && tsup",
-		"dev": "prisma generate --watch & tsup --watch"
+		"dev": "prisma generate --watch & tsup --watch",
+		"migrate": "prisma migrate dev"
 	},
 	"devDependencies": {
 		"prisma": "^3.12.0",

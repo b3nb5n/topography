@@ -2,13 +2,17 @@ import { Response } from '@topography/comm'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-export type DeleteUserResponse = Response
+export const deleteUser = async (ctx: Context, id: string) => {
+	await ctx.prisma.user.delete({ where: { id } })
+}
+
+export type DeleteUserResponse = Response<Awaited<ReturnType<typeof deleteUser>>>
 
 interface DeleteUserParams {
 	id: string
 }
 
-const deleteUser = (
+export const deleteUserHandler = (
 	ctx: Context
 ): RequestHandler<DeleteUserParams, DeleteUserResponse> => {
 	return async (req, res) => {
@@ -17,7 +21,7 @@ const deleteUser = (
 		// TODO: authenticate request
 
 		try {
-			await ctx.prisma.user.delete({ where: { id } })
+			await deleteUser(ctx, id)
 			return res.send({})
 		} catch (error) {
 			return res.status(500).send({ error })

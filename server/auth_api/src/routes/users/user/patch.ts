@@ -1,15 +1,23 @@
 import { errors, Response } from '@topography/comm'
-import { userDataSchema } from '@topography/schema'
+import { UserData, userDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
 
-export type PatchUserResponse = Response<undefined>
+export const updateUser = async (
+	ctx: Context,
+	id: string,
+	data: Partial<UserData>
+) => {
+	await ctx.prisma.user.update({ where: { id }, data })
+}
+
+export type PatchUserResponse = Response<Awaited<ReturnType<typeof updateUser>>>
 
 interface PatchUserParams {
 	id: string
 }
 
-const patchUser = (
+export const patchUserHandler = (
 	ctx: Context
 ): RequestHandler<PatchUserParams, PatchUserResponse> => {
 	return async (req, res) => {
@@ -22,12 +30,9 @@ const patchUser = (
 		const { data } = parseResult
 
 		try {
-			await ctx.prisma.user.update({ where: { id }, data })
-			return res.send({})
+			return res.send({ data: await updateUser(ctx, id, data) })
 		} catch {
 			return res.status(500).send({ error: errors.UNKNOWN })
 		}
 	}
 }
-
-export default patchUser

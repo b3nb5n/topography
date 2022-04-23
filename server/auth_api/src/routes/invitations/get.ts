@@ -1,9 +1,16 @@
-import { Invitation } from '@prisma/client'
 import { Response } from '@topography/comm'
+import { invitationDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../..'
 
-type GetInvitationsResponse = Response<Invitation[]>
+export const getInvitationsData = async (ctx: Context) => {
+	const invitations = await ctx.prisma.invitation.findMany()
+	return invitations.map((data) => invitationDataSchema.parse(data))
+}
+
+type GetInvitationsResponse = Response<
+	Awaited<ReturnType<typeof getInvitationsData>>
+>
 
 export const getInvitations = (
 	ctx: Context
@@ -12,8 +19,7 @@ export const getInvitations = (
 		// TODO: Authenticate request
 
 		try {
-			const invitations = await ctx.prisma.invitation.findMany()
-			return res.send({ data: invitations })
+			return res.send({ data: await getInvitationsData(ctx) })
 		} catch (error) {
 			return res.status(500).send({ error })
 		}

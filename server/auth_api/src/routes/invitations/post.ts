@@ -1,14 +1,22 @@
 import { Response } from '@topography/comm'
-import { invitationDataSchema } from '@topography/schema'
+import { InvitationData, invitationDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
 
-export interface PostInvitationResponseData {
-	id: string
+export const createInvitation = async (ctx: Context, data: InvitationData) => {
+	await ctx.prisma.invitation.create({
+		data: {
+			id: uid(16),
+			email: data.email,
+			role: { connect: { id: data.roleId } },
+		},
+	})
 }
 
-export type PostInvitationResponse = Response<PostInvitationResponseData>
+export type PostInvitationResponse = Response<
+	Awaited<ReturnType<typeof createInvitation>>
+>
 
 export const postInvitation = (
 	ctx: Context
@@ -22,15 +30,7 @@ export const postInvitation = (
 		// TODO: Authenticate request
 
 		try {
-			const invitation = await ctx.prisma.invitation.create({
-				data: {
-					id: uid(16),
-					email: data.email,
-					role: { connect: { id: data.roleId } },
-				},
-			})
-
-			return res.status(201).send({ data: { id: invitation.id } })
+			return res.status(201).send({ data: await createInvitation(ctx, data) })
 		} catch (error) {
 			return res.status(500).send({ error })
 		}

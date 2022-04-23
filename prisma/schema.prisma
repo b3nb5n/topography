@@ -23,14 +23,14 @@ datasource db {
 
 model Role {
   id          String       @id @db.Char(16)
-  name        String       @unique
+  name        String       @unique @db.VarChar(32)
   invitations Invitation[]
   users       User[]
 }
 
 model Invitation {
   id     String @id @db.Char(16)
-  email  String
+  email  String @db.VarChar(32)
   role   Role   @relation(fields: [roleId], references: [id])
   roleId String @db.Char(16)
 }
@@ -39,10 +39,10 @@ model User {
   id        String @id @db.Char(16)
   role      Role   @relation(fields: [roleId], references: [id])
   roleId    String @db.Char(16)
-  firstName String
-  lastName  String
+  firstName String @db.VarChar(32)
+  lastName  String @db.VarChar(32)
   email     String @unique
-  password  String
+  password  String 
 }
 
 // Content
@@ -75,7 +75,7 @@ model Property {
   id          String       @id @db.Char(16)
   meta        Meta         @relation(fields: [metaId], references: [id])
   metaId      String       @unique @db.Char(16)
-  host        String?
+  host        String?      @db.VarChar(64)
   collections Collection[]
 }
 
@@ -95,4 +95,5 @@ model Item {
   metaId       String     @unique @db.Char(16)
   collection   Collection @relation(fields: [collectionId], references: [id])
   collectionId String     @db.Char(16)
+  data Json
 }

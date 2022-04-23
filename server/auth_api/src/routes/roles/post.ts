@@ -1,16 +1,18 @@
 import { Response } from '@topography/comm'
-import { roleDataSchema } from '@topography/schema'
+import { RoleData, roleDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
 
-export interface PostRoleResponseData {
-	id: string
+export const createRole = async (ctx: Context, data: RoleData) => {
+	await ctx.prisma.role.create({ data: { id: uid(16), ...data } })
 }
 
-export type PostRoleResponse = Response<PostRoleResponseData>
+export type PostRoleResponse = Response<Awaited<ReturnType<typeof createRole>>>
 
-export const postRole = (ctx: Context): RequestHandler<{}, PostRoleResponse> => {
+export const postRoleHandler = (
+	ctx: Context
+): RequestHandler<{}, PostRoleResponse> => {
 	return async (req, res) => {
 		const parseResult = roleDataSchema.safeParse(req.body)
 		if (!parseResult.success)
@@ -20,15 +22,9 @@ export const postRole = (ctx: Context): RequestHandler<{}, PostRoleResponse> => 
 		// TODO: Authenticate request
 
 		try {
-			const role = await ctx.prisma.role.create({
-				data: { id: uid(16), ...data },
-			})
-
-			return res.status(201).send({ data: { id: role.id } })
+			return res.status(201).send({ data: await createRole(ctx, data) })
 		} catch (error) {
 			return res.status(500).send({ error })
 		}
 	}
 }
-
-export default postRole
