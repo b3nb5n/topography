@@ -18,8 +18,6 @@ export const deleteRoleHandler = (
 	return async (req, res) => {
 		const { id } = req.params
 
-		// TODO: Authenticate request
-
 		try {
 			return res.send({ data: await deleteRole(ctx, id) })
 		} catch (error) {

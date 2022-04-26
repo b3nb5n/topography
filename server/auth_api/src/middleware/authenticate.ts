@@ -6,13 +6,12 @@ import { payloadShema } from '../utils/payload'
 const authenticate: RequestHandler<{}, Response> = (req, res, next) => {
 	const auth = req.headers.authorization ?? ''
 	const token = /[\w-]+\.[\w-]+\.[\w-]+/.exec(auth)?.at(0) ?? ''
-
-	try {
-		res.locals.payload = payloadShema.parse(jwt.decode(token))
-		next()
-	} catch {
+	const parseResult = payloadShema.safeParse(jwt.decode(token))
+	if (!parseResult.success)
 		return res.status(401).send({ error: errors.UNAUTHENTICATED })
-	}
+	
+	res.locals.paylod = parseResult.data
+	return next()
 }
 
 export default authenticate

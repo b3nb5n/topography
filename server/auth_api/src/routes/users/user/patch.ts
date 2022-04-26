@@ -21,8 +21,10 @@ export const patchUserHandler = (
 	ctx: Context
 ): RequestHandler<PatchUserParams, PatchUserResponse> => {
 	return async (req, res) => {
-		const { id } = req.params
-		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
+		let { id } = req.params
+		// local variable `payload` set by `authenticate` middleware.
+		if (id === 'me') id = res.locals.payload.uid
+		
 
 		const parseResult = userDataSchema.partial().safeParse(req.body)
 		if (!parseResult.success)

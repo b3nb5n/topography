@@ -1,10 +1,7 @@
 import { errors, Response } from '@topography/comm'
 import { userDataSchema } from '@topography/schema'
-import { validateResourceId } from '@topography/utils'
 import { RequestHandler } from 'express'
-import * as jwt from 'jsonwebtoken'
 import { Context } from '../../..'
-import { payloadShema } from '../../../utils/payload'
 
 export const getUserData = async (ctx: Context, id: string) => {
 	const user = await ctx.prisma.user.findUnique({ where: { id } })
@@ -23,12 +20,8 @@ export const getUserHandler = (
 ): RequestHandler<GetUserParams, GetUserResponse> => {
 	return async (req, res) => {
 		let { id } = req.params
-		if (id === 'me') {
-			const parseResult = payloadShema.safeParse(jwt.decode(req.cookies?.jwt))
-			if (parseResult.success) id = parseResult.data.uid
-		}
-		if (!validateResourceId(id))
-			return res.status(400).send({ error: 'invalid resource id' })
+		// local variable `payload` set by `authenticate` middleware.
+		if (id === 'me') id = res.locals.payload.uid
 
 		try {
 			const user = await getUserData(ctx, id)

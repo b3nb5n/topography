@@ -38,8 +38,6 @@ export const acceptInvitationHandler = (
 ): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		if (!id) return res.status(400).send({ error: errors.MISSING_ID })
-
 		const parseResult = userDataSchema.omit({ roleId: true }).safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })

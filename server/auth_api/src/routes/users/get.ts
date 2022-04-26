@@ -14,8 +14,6 @@ export const getUsersHandler = (
 	ctx: Context
 ): RequestHandler<{}, GetUsersResponse> => {
 	return async (_req, res) => {
-		// TODO: Authenticate request
-
 		try {
 			const data = await getUsersData(ctx)
 			return res.send({ data })

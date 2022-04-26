@@ -16,8 +16,6 @@ export const getInvitationsHandler = (
 	ctx: Context
 ): RequestHandler<{}, GetInvitationsResponse> => {
 	return async (_req, res) => {
-		// TODO: Authenticate request
-
 		try {
 			return res.send({ data: await getInvitationsData(ctx) })
 		} catch (error) {

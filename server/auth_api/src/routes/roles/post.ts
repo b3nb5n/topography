@@ -19,8 +19,6 @@ export const postRoleHandler = (
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
 
-		// TODO: Authenticate request
-
 		try {
 			return res.status(201).send({ data: await createRole(ctx, data) })
 		} catch (error) {

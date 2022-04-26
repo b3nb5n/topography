@@ -27,8 +27,6 @@ export const postInvitationHandler = (
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
 
-		// TODO: Authenticate request
-
 		try {
 			return res.status(201).send({ data: await createInvitation(ctx, data) })
 		} catch (error) {

@@ -22,7 +22,6 @@ export const patchRoleHandler = (
 ): RequestHandler<PatchRoleParams, PatchRoleResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-
 		const parseResult = roleDataSchema.partial().safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })

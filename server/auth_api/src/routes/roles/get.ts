@@ -14,8 +14,6 @@ export const getRolesHandler = (
 	ctx: Context
 ): RequestHandler<{}, GetRolesResponse> => {
 	return async (_req, res) => {
-		// TODO: authenticate request
-
 		try {
 			return res.send({ data: await getRoles(ctx) })
 		} catch (error) {

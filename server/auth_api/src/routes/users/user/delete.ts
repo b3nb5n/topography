@@ -16,9 +16,9 @@ export const deleteUserHandler = (
 	ctx: Context
 ): RequestHandler<DeleteUserParams, DeleteUserResponse> => {
 	return async (req, res) => {
-		const { id } = req.params
-
-		// TODO: authenticate request
+		let { id } = req.params
+		// local variable `payload` set by `authenticate` middleware.
+		if (id === 'me') id = res.locals.payload.uid
 
 		try {
 			await deleteUser(ctx, id)
