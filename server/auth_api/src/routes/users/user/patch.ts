@@ -24,7 +24,6 @@ export const patchUserHandler = (
 		let { id } = req.params
 		// local variable `payload` set by `authenticate` middleware.
 		if (id === 'me') id = res.locals.payload.uid
-		
 
 		const parseResult = userDataSchema.partial().safeParse(req.body)
 		if (!parseResult.success)

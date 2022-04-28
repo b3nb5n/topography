@@ -10,4 +10,6 @@ const tokenRouter = (ctx: Context) => {
 	return router
 }
 
+export * from './get'
+
 export default tokenRouter

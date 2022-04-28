@@ -8,8 +8,16 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^2.8.8",
+		"@mantine/core": "^4.2.1",
+		"@mantine/hooks": "^4.2.1",
+		"@topography/auth_api": "workspace:^",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
+		"react-hook-form": "^7.30.0",
+		"react-router": "^6.3.0",
+		"react-router-dom": "^6.3.0",
+		"zod": "^3.14.4",
 		"zod-to-json-schema": "^3.11.3"
 	},
 	"devDependencies": {

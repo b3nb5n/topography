@@ -8,10 +8,10 @@ export interface Context {
 	jwtSecret: string
 }
 
-const main = async () => {
+;;;;;;(async () => {
 	const globalContext: Context = {
 		prisma: new PrismaClient(),
-		jwtSecret: process.env.SECRET,
+		jwtSecret: process.env.SECRET ?? '',
 	}
 
 	await globalContext.prisma.$connect()
@@ -20,9 +20,11 @@ const main = async () => {
 	app.use(json())
 
 	app.use('/', router(globalContext))
+	// jjj
 
 	const PORT = process.env.PORT ?? 5500
 	app.listen(PORT, () => console.log(`Auth API running on port ${PORT}`))
-}
+})()
 
-main()
+export * from './routes'
+

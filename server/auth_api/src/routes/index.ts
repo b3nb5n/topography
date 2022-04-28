@@ -16,4 +16,6 @@ const router = (ctx: Context) => {
 	return router
 }
 
+export * from './token'
+
 export default router

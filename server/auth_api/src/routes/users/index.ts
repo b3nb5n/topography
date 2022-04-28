@@ -21,4 +21,9 @@ const usersRouter = (ctx: Context) => {
 	return router
 }
 
+export * from './get'
+export * from './user/delete'
+export * from './user/get'
+export * from './user/patch'
+
 export default usersRouter

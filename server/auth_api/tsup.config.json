@@ -1,0 +1,7 @@
+{
+	"entry": ["src/**/*.ts"],
+	"splitting": false,
+	"clean": true,
+	"dts": true,
+	"format": ["esm", "cjs"]
+}

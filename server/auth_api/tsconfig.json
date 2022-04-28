@@ -2,12 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "Node",
     "target": "ESNext",
     "rootDir": "src",
     "outDir": "dist",
-    "declaration": false,
-    "declarationMap": false,
-    "sourceMap": false,
     "esModuleInterop": true,
   }
 }

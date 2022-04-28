@@ -18,4 +18,9 @@ const rolesRouter = (ctx: Context) => {
 	return router
 }
 
+export * from './get'
+export * from './post'
+export * from './role/delete'
+export * from './role/patch'
+
 export default rolesRouter
