@@ -19,6 +19,9 @@ node_modules/
 build
 dist
 
+# Generated code
+generated
+
 # Yarn
 .yarn/cache
 .yarn/install-state.gz
