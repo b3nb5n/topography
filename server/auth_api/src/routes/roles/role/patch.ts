@@ -1,13 +1,10 @@
 import { errors, Response } from '@topography/comm'
-import { RoleData, roleDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
+import { roleSchema } from '../../../generated/models'
+import { Role } from '../../../generated/prisma'
 
-export const updateRole = async (
-	ctx: Context,
-	id: string,
-	data: Partial<RoleData>
-) => {
+export const updateRole = async (ctx: Context, id: string, data: Partial<Role>) => {
 	await ctx.prisma.role.update({ where: { id }, data })
 }
 
@@ -22,7 +19,7 @@ export const patchRoleHandler = (
 ): RequestHandler<PatchRoleParams, PatchRoleResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		const parseResult = roleDataSchema.partial().safeParse(req.body)
+		const parseResult = roleSchema.partial().safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

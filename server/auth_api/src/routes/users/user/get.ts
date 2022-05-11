@@ -1,12 +1,12 @@
 import { errors, Response } from '@topography/comm'
-import { userDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
+import { userSchema } from '../../../generated/models'
 
 export const getUserData = async (ctx: Context, id: string) => {
 	const user = await ctx.prisma.user.findUnique({ where: { id } })
 	if (!user) return null
-	return userDataSchema.parse(user)
+	return userSchema.parse(user)
 }
 
 export type GetUserResponse = Response<Awaited<ReturnType<typeof getUserData>>>

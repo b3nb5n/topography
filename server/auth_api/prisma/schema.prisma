@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../src/generated/prisma"
+}
+
+generator zod {
+  provider                 = "zod-prisma"
+  output                   = "../src/generated/models"
+  relationModel            = true
+  modelCase                = "camelCase"
+  modelSuffix              = "Schema"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
+  invitations Invitation[]
+  users       User[]
+}
+
+model Invitation {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  email  String 
+  role   Role   @relation(fields: [roleId], references: [id])
+  roleId String @db.ObjectId
+}
+
+model User {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role   @relation(fields: [roleId], references: [id])
+  roleId    String @db.ObjectId
+  firstName String
+  lastName  String
+  email     String @unique
+  password  String 
+}

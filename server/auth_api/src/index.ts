@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client'
 import { json } from 'body-parser'
 import express from 'express'
+import { PrismaClient } from './generated/prisma'
 import router from './routes'
 
 export interface Context {
@@ -8,7 +8,7 @@ export interface Context {
 	jwtSecret: string
 }
 
-;;;;;;(async () => {
+;(async () => {
 	const globalContext: Context = {
 		prisma: new PrismaClient(),
 		jwtSecret: process.env.SECRET ?? '',
@@ -27,4 +27,3 @@ export interface Context {
 })()
 
 export * from './routes'
-

@@ -1,11 +1,11 @@
 import { Response } from '@topography/comm'
-import { userDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../..'
+import { userSchema } from '../../generated/models'
 
 export const getUsersData = async (ctx: Context) => {
 	const users = await ctx.prisma.user.findMany()
-	return users.map((user) => userDataSchema.parse(user))
+	return users.map((user) => userSchema.parse(user))
 }
 
 type GetUsersResponse = Response<Awaited<ReturnType<typeof getUsersData>>>

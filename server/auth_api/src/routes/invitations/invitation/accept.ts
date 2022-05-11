@@ -1,22 +1,19 @@
 import { errors, Response } from '@topography/comm'
-import { UserData, userDataSchema } from '@topography/schema'
 import { hash } from 'bcrypt'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
+import { userSchema } from '../../../generated/models'
+import { User } from '../../../generated/prisma'
 
-export const acceptInvitation = async (
-	ctx: Context,
-	id: string,
-	data: UserData
-) => {
+export const acceptInvitation = async (ctx: Context, id: string, data: User) => {
 	const hashedPassword = await hash(data.password, 6)
 
 	await ctx.prisma.$transaction([
 		ctx.prisma.invitation.delete({ where: { id } }),
 		ctx.prisma.user.create({
 			data: {
-				id,
 				...data,
+				id,
 				roleId: undefined,
 				password: hashedPassword,
 				role: { connect: { id: data.roleId } },
@@ -38,7 +35,7 @@ export const acceptInvitationHandler = (
 ): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
 		const { id } = req.params
-		const parseResult = userDataSchema.omit({ roleId: true }).safeParse(req.body)
+		const parseResult = userSchema.omit({ roleId: true }).safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

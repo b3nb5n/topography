@@ -10,9 +10,7 @@
 		"test": "jest -i --root tests"
 	},
 	"dependencies": {
-		"@prisma/client": "^3.12.0",
 		"@topography/comm": "workspace:^",
-		"@topography/schema": "workspace:^",
 		"@topography/utils": "workspace:^",
 		"body-parser": "^1.20.0",
 		"express": "^4.17.3",

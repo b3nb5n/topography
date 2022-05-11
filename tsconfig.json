@@ -12,6 +12,7 @@
     "strict": true,
     "alwaysStrict": true,
     "noUnusedParameters": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true
   }
 }

@@ -1,13 +1,10 @@
 import { errors, Response } from '@topography/comm'
-import { UserData, userDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../../..'
+import { userSchema } from '../../../generated/models'
+import { User } from '../../../generated/prisma'
 
-export const updateUser = async (
-	ctx: Context,
-	id: string,
-	data: Partial<UserData>
-) => {
+export const updateUser = async (ctx: Context, id: string, data: Partial<User>) => {
 	await ctx.prisma.user.update({ where: { id }, data })
 }
 
@@ -25,7 +22,7 @@ export const patchUserHandler = (
 		// local variable `payload` set by `authenticate` middleware.
 		if (id === 'me') id = res.locals.payload.uid
 
-		const parseResult = userDataSchema.partial().safeParse(req.body)
+		const parseResult = userSchema.partial().safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

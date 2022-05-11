@@ -1,11 +1,12 @@
 import { Response } from '@topography/comm'
-import { RoleData, roleDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { uid } from 'uid'
 import { Context } from '../..'
+import { roleSchema } from '../../generated/models'
+import { Role } from '../../generated/prisma'
 
-export const createRole = async (ctx: Context, data: RoleData) => {
-	await ctx.prisma.role.create({ data: { id: uid(16), ...data } })
+export const createRole = async (ctx: Context, data: Role) => {
+	await ctx.prisma.role.create({ data: { ...data, id: uid(16) } })
 }
 
 export type PostRoleResponse = Response<Awaited<ReturnType<typeof createRole>>>
@@ -14,7 +15,7 @@ export const postRoleHandler = (
 	ctx: Context
 ): RequestHandler<{}, PostRoleResponse> => {
 	return async (req, res) => {
-		const parseResult = roleDataSchema.safeParse(req.body)
+		const parseResult = roleSchema.safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult

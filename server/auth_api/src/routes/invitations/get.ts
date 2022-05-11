@@ -1,11 +1,11 @@
 import { Response } from '@topography/comm'
-import { invitationDataSchema } from '@topography/schema'
 import { RequestHandler } from 'express'
 import { Context } from '../..'
+import { invitationSchema } from '../../generated/models'
 
 export const getInvitationsData = async (ctx: Context) => {
 	const invitations = await ctx.prisma.invitation.findMany()
-	return invitations.map((data) => invitationDataSchema.parse(data))
+	return invitations.map((data) => invitationSchema.parse(data))
 }
 
 type GetInvitationsResponse = Response<
