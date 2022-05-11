@@ -1,20 +1,13 @@
 import { Router } from 'express'
-import { Context } from '..'
-import validateResourceIdHandler from '../middleware/validate-resource-id'
-import collectionsRouter from './collections'
-import itemsRouter from './items'
-import propertiesRouter from './properties'
+import { z } from 'zod'
+import { collectionDataSchema } from '../models/collection'
+import { propertyDataSchema } from '../models/property'
+import resourceRouter from './resource'
 
-const router = (ctx: Context) => {
-	const router = Router()
+const router = Router()
 
-	router.use('/properties', propertiesRouter(ctx))
-	router.use('/collections', collectionsRouter(ctx))
-	router.use('/items', itemsRouter(ctx))
-
-	router.use('/*/:id', validateResourceIdHandler)
-
-	return router
-}
+router.use('/properties', resourceRouter({ dataSchema: propertyDataSchema }))
+router.use('/collections', resourceRouter({ dataSchema: collectionDataSchema }))
+router.use('/items', resourceRouter({ dataSchema: z.object({}).passthrough() }))
 
 export default router
