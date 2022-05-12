@@ -1,34 +1,29 @@
-import { errors, Response } from '@topography/comm'
+import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../../..'
-import { roleSchema } from '../../../generated/models'
-import { Role } from '../../../generated/prisma'
+import { roleRepository } from '../../../data-source'
+import { roleDataSchema } from '../../../entities'
 
-export const updateRole = async (ctx: Context, id: string, data: Partial<Role>) => {
-	await ctx.prisma.role.update({ where: { id }, data })
-}
-
-export type PatchRoleResponse = Response<Awaited<ReturnType<typeof updateRole>>>
+export type PatchRoleResponse = Response
 
 interface PatchRoleParams {
 	id: string
 }
 
-export const patchRoleHandler = (
-	ctx: Context
-): RequestHandler<PatchRoleParams, PatchRoleResponse> => {
-	return async (req, res) => {
-		const { id } = req.params
-		const parseResult = roleSchema.partial().safeParse(req.body)
-		if (!parseResult.success)
-			return res.status(400).send({ error: parseResult.error })
-		const { data } = parseResult
-		if (Object.keys.length === 0) res.send({})
+export const patchRoleHandler: RequestHandler<
+	PatchRoleParams,
+	PatchRoleResponse
+> = async (req, res) => {
+	const { id } = req.params
+	const parseResult = roleDataSchema.partial().safeParse(req.body)
+	if (!parseResult.success)
+		return res.status(400).send({ error: parseResult.error })
+	const { data } = parseResult
+	if (Object.keys.length === 0) res.send({})
 
-		try {
-			return res.send({ data: await updateRole(ctx, id, data) })
-		} catch {
-			return res.status(500).send({ error: errors.UNKNOWN })
-		}
+	try {
+		await roleRepository.updateOne({ id }, { data })
+		return res.send({})
+	} catch {
+		return res.status(500).send({ error: ERRORS.UNKNOWN })
 	}
 }

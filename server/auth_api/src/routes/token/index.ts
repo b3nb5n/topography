@@ -1,15 +1,10 @@
 import { Router } from 'express'
-import { Context } from '../..'
 import { getTokenHandler } from './get'
 
-const tokenRouter = (ctx: Context) => {
-	const router = Router()
+const router = Router()
 
-	router.get('/', getTokenHandler(ctx))
-
-	return router
-}
+router.get('/', getTokenHandler)
 
 export * from './get'
 
-export default tokenRouter
+export default router

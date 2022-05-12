@@ -1,7 +1,6 @@
-import { Response } from '@topography/comm'
+import { Resource, Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ResourceHandlerContext } from '.'
-import Resource from '../../models/resource'
 
 export type PostResourceResponse = Response<{ id: string }>
 

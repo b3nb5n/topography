@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { Context } from '../..'
 import authenticate from '../../middleware/authenticate'
 import unless from '../../middleware/unless'
 import { getInvitationsHandler } from './get'
@@ -7,22 +6,18 @@ import { acceptInvitationHandler } from './invitation/accept'
 import { deleteInvitationHandler } from './invitation/delete'
 import { postInvitationHandler } from './post'
 
-const invitationsRouter = (ctx: Context) => {
-	const router = Router()
+const router = Router()
 
-	router.use(unless(['/:id/accept'], authenticate))
+router.use(unless(['/:id/accept'], authenticate))
 
-	router.get('/', getInvitationsHandler(ctx))
-	router.post('/', postInvitationHandler(ctx))
-	router.delete('/:id', deleteInvitationHandler(ctx))
-	router.post('/:id/accept', acceptInvitationHandler(ctx))
-
-	return router
-}
+router.get('/', getInvitationsHandler)
+router.post('/', postInvitationHandler)
+router.delete('/:id', deleteInvitationHandler)
+router.post('/:id/accept', acceptInvitationHandler)
 
 export * from './get'
 export * from './invitation/accept'
 export * from './invitation/delete'
 export * from './post'
 
-export default invitationsRouter
+export default router

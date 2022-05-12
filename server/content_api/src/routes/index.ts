@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import { z } from 'zod'
-import { collectionDataSchema } from '../models/collection'
-import { propertyDataSchema } from '../models/property'
+import { collectionDataSchema, propertyDataSchema } from '../models'
 import resourceRouter from './resource'
 
 const router = Router()

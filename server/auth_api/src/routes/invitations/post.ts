@@ -1,37 +1,25 @@
-import { Response } from '@topography/comm'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { uid } from 'uid'
-import { Context } from '../..'
-import { invitationSchema } from '../../generated/models'
-import { Invitation } from '../../generated/prisma'
+import { ObjectID } from 'typeorm'
+import { invitationRepository } from '../../data-source'
+import { Invitation, invitationDataSchema } from '../../entities'
 
-export const createInvitation = async (ctx: Context, data: Invitation) => {
-	await ctx.prisma.invitation.create({
-		data: {
-			id: uid(16),
-			email: data.email,
-			role: { connect: { id: data.roleId } },
-		},
-	})
-}
+export type PostInvitationResponse = Response<{ id: ObjectID }>
 
-export type PostInvitationResponse = Response<
-	Awaited<ReturnType<typeof createInvitation>>
->
+export const postInvitationHandler: RequestHandler<
+	{},
+	PostInvitationResponse
+> = async (req, res) => {
+	const parseResult = invitationDataSchema.safeParse(req.body)
+	if (!parseResult.success)
+		return res.status(400).send({ error: parseResult.error })
+	const { data } = parseResult
 
-export const postInvitationHandler = (
-	ctx: Context
-): RequestHandler<{}, PostInvitationResponse> => {
-	return async (req, res) => {
-		const parseResult = invitationSchema.safeParse(req.body)
-		if (!parseResult.success)
-			return res.status(400).send({ error: parseResult.error })
-		const { data } = parseResult
-
-		try {
-			return res.status(201).send({ data: await createInvitation(ctx, data) })
-		} catch (error) {
-			return res.status(500).send({ error })
-		}
+	try {
+		const invitation = new Invitation({ data })
+		invitationRepository.save(invitation)
+		return res.status(201).send({ data: { id: invitation.id } })
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

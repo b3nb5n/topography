@@ -12,3 +12,5 @@ const main = async () => {
 }
 
 main()
+
+export * from './models'

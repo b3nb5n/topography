@@ -1,24 +1,18 @@
-import { Response } from '@topography/comm'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../..'
-import { userSchema } from '../../generated/models'
+import { userRepository } from '../../data-source'
+import { User } from '../../entities'
 
-export const getUsersData = async (ctx: Context) => {
-	const users = await ctx.prisma.user.findMany()
-	return users.map((user) => userSchema.parse(user))
-}
+type GetUsersResponse = Response<User[]>
 
-type GetUsersResponse = Response<Awaited<ReturnType<typeof getUsersData>>>
-
-export const getUsersHandler = (
-	ctx: Context
-): RequestHandler<{}, GetUsersResponse> => {
-	return async (_req, res) => {
-		try {
-			const data = await getUsersData(ctx)
-			return res.send({ data })
-		} catch (error) {
-			return res.status(500).send({ error })
-		}
+export const getUsersHandler: RequestHandler<{}, GetUsersResponse> = async (
+	_req,
+	res
+) => {
+	try {
+		const users = await userRepository.find()
+		return res.send({ data: users })
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

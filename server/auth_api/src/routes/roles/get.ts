@@ -1,23 +1,18 @@
-import { Response } from '@topography/comm'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../..'
-import { roleSchema } from '../../generated/models'
+import { roleRepository } from '../../data-source'
+import { Role } from '../../entities'
 
-export const getRoles = async (ctx: Context) => {
-	const roles = await ctx.prisma.role.findMany()
-	return roles.map((role) => roleSchema.parse(role))
-}
+export type GetRolesResponse = Response<Role[]>
 
-export type GetRolesResponse = Response<Awaited<ReturnType<typeof getRoles>>>
-
-export const getRolesHandler = (
-	ctx: Context
-): RequestHandler<{}, GetRolesResponse> => {
-	return async (_req, res) => {
-		try {
-			return res.send({ data: await getRoles(ctx) })
-		} catch (error) {
-			return res.status(500).send({ error })
-		}
+export const getRolesHandler: RequestHandler<{}, GetRolesResponse> = async (
+	_req,
+	res
+) => {
+	try {
+		const roles = await roleRepository.find()
+		return res.send({ data: roles })
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

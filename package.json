@@ -9,14 +9,14 @@
 	"workspaces": [
 		"client",
 		"server/*",
-		"common/*"
+		"common"
 	],
 	"scripts": {
 		"test": "lerna run test --since",
 		"build": "lerna run build",
 		"dev": "lerna run dev --parallel",
 		"version": "lerna version --no-push",
-		"db:start": "docker run --name topography_db -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres"
+		"db:start": "docker run --name topography_db -d -p 27017:27017 mongo"
 	},
 	"devDependencies": {
 		"lerna": "^4.0.0"

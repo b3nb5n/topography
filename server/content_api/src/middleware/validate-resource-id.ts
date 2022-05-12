@@ -1,5 +1,4 @@
-import { errors, Response } from '@topography/comm'
-import { validateResourceId } from '@topography/utils'
+import { ERRORS, Response, validateResourceId } from '@topography/common'
 import { RequestHandler } from 'express'
 
 const validateResourceIdHandler: RequestHandler<{ id?: unknown }, Response> = (
@@ -8,7 +7,7 @@ const validateResourceIdHandler: RequestHandler<{ id?: unknown }, Response> = (
 	next
 ) => {
 	if (validateResourceId(req.params.id)) return next()
-	return res.status(400).send({ error: errors.INVALID_ID })
+	return res.status(400).send({ error: ERRORS.MISSING_ID })
 }
 
 export default validateResourceIdHandler

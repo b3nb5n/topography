@@ -1,5 +1,5 @@
 {
-	"name": "@topography/utils",
+	"name": "@topography/common",
 	"packageManager": "yarn@3.2.0",
 	"version": "0.1.0",
 	"license": "MIT",
@@ -7,27 +7,15 @@
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"tsup": {
-		"entry": [
-			"src/**/*.ts"
-		],
-		"splitting": false,
-		"sourcemap": true,
-		"clean": true,
-		"dts": true,
-		"format": [
-			"esm",
-			"cjs"
-		]
-	},
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch"
 	},
 	"dependencies": {
-		"zod": "^3.14.4"
+		"typeorm": "^0.3.6",
+		"zod": "^3.16.0"
 	},
 	"devDependencies": {
-		"tsup": "^5.12.6"
+		"tsup": "^5.12.7"
 	}
 }

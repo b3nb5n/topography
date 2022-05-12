@@ -1,29 +1,27 @@
-import { Response } from '@topography/comm'
+import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../../..'
+import { invitationRepository } from '../../../data-source'
 
-export const deleteInvitation = async (ctx: Context, id: string) => {
-	await ctx.prisma.invitation.delete({ where: { id } })
-}
-
-export type DeleteInvitationResponse = Response<
-	Awaited<ReturnType<typeof deleteInvitation>>
->
+export type DeleteInvitationResponse = Response
 
 interface DeleteInvitationParams {
 	id: string
 }
 
-export const deleteInvitationHandler = (
-	ctx: Context
-): RequestHandler<DeleteInvitationParams, DeleteInvitationResponse> => {
-	return async (req, res) => {
-		const { id } = req.params
+export const deleteInvitationHandler: RequestHandler<
+	DeleteInvitationParams,
+	DeleteInvitationResponse
+> = async (req, res) => {
+	const { id } = req.params
 
-		try {
-			return res.send({ data: await deleteInvitation(ctx, id) })
-		} catch (error) {
-			return res.status(500).send({ error })
-		}
+	try {
+		const result = await invitationRepository.deleteOne({ id })
+		if (!result.deletedCount)
+			return res.status(404).send({ error: ERRORS.NOT_FOUND })
+		if (!result.result.ok) throw ERRORS.UNKNOWN
+
+		return res.send({})
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

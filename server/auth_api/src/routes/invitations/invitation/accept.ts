@@ -1,58 +1,36 @@
-import { errors, Response } from '@topography/comm'
-import { hash } from 'bcrypt'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../../..'
-import { userSchema } from '../../../generated/models'
-import { User } from '../../../generated/prisma'
+import { invitationRepository, userRepository } from '../../../data-source'
+import { invitationSchema, User, userDataSchema } from '../../../entities'
 
-export const acceptInvitation = async (ctx: Context, id: string, data: User) => {
-	const hashedPassword = await hash(data.password, 6)
-
-	await ctx.prisma.$transaction([
-		ctx.prisma.invitation.delete({ where: { id } }),
-		ctx.prisma.user.create({
-			data: {
-				...data,
-				id,
-				roleId: undefined,
-				password: hashedPassword,
-				role: { connect: { id: data.roleId } },
-			},
-		}),
-	])
-}
-
-export type AcceptInvitationResponse = Response<
-	Awaited<ReturnType<typeof acceptInvitation>>
->
+export type AcceptInvitationResponse = Response
 
 interface AcceptInvitationParams {
 	id: string
 }
 
-export const acceptInvitationHandler = (
-	ctx: Context
-): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
-	return async (req, res) => {
-		const { id } = req.params
-		const parseResult = userSchema.omit({ roleId: true }).safeParse(req.body)
-		if (!parseResult.success)
-			return res.status(400).send({ error: parseResult.error })
-		const { data } = parseResult
+export const acceptInvitationHandler: RequestHandler<
+	AcceptInvitationParams,
+	AcceptInvitationResponse
+> = async (req, res) => {
+	const { id } = req.params
+	const parseResult = userDataSchema.omit({ roleId: true }).safeParse(req.body)
+	if (!parseResult.success)
+		return res.status(400).send({ error: parseResult.error })
+	const { data } = parseResult
 
-		try {
-			const invitation = await ctx.prisma.invitation.findUnique({ where: { id } })
-			if (!invitation) return res.status(404).send({ error: errors.NOT_FOUND })
+	try {
+		const deleteResult = await invitationRepository.findOneAndDelete({ id })
+		if (!deleteResult.ok) throw deleteResult.lastErrorObject
+		const invitation = invitationSchema.parse(deleteResult.value)
+		const user = new User({
+			id: invitation.id,
+			data: { ...data, ...invitation.data },
+		})
+		await userRepository.save(user)
 
-			return res.send({
-				data: await acceptInvitation(ctx, id, {
-					...data,
-					email: invitation.email,
-					roleId: invitation.roleId,
-				}),
-			})
-		} catch (err) {
-			return res.sendStatus(500)
-		}
+		return res.send({})
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

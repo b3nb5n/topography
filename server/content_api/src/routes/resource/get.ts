@@ -1,4 +1,4 @@
-import { Response } from '@topography/comm'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ResourceHandlerContext } from '.'
 

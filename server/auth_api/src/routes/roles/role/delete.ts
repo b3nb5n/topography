@@ -1,27 +1,23 @@
-import { Response } from '@topography/comm'
+import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { Context } from '../../..'
+import { roleRepository } from '../../../data-source'
 
-export const deleteRole = async (ctx: Context, id: string) => {
-	await ctx.prisma.role.delete({ where: { id } })
-}
-
-export type DeleteRoleResponse = Response<Awaited<ReturnType<typeof deleteRole>>>
+export type DeleteRoleResponse = Response
 
 interface DeleteRoleParams {
 	id: string
 }
 
-export const deleteRoleHandler = (
-	ctx: Context
-): RequestHandler<DeleteRoleParams, DeleteRoleResponse> => {
-	return async (req, res) => {
-		const { id } = req.params
+export const deleteRoleHandler: RequestHandler<
+	DeleteRoleParams,
+	DeleteRoleResponse
+> = async (req, res) => {
+	const { id } = req.params
 
-		try {
-			return res.send({ data: await deleteRole(ctx, id) })
-		} catch (error) {
-			return res.status(500).send({ error })
-		}
+	try {
+		await roleRepository.deleteOne({ id })
+		return res.send({})
+	} catch (error) {
+		return res.status(500).send({ error })
 	}
 }

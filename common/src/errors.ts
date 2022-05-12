@@ -1,4 +1,4 @@
-export const errors = {
+export const ERRORS = {
 	NOT_FOUND: "Couldn't find that resource",
 	UNKNOWN: 'An unknown error ocurred',
 	MISSING_ID: 'Missing resource id',
