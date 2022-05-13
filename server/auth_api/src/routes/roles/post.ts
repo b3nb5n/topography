@@ -1,25 +1,26 @@
-import { Response } from '@topography/common'
+import { Resource, Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { ObjectID } from 'typeorm'
-import { roleRepository } from '../../data-source'
-import { Role, RoleData, roleDataSchema } from '../../entities'
+import { ObjectId } from 'mongodb'
+import { HandlerContext } from '..'
+import { RoleData, roleDataSchema } from '../../models'
 
-export type PostRoleResponse = Response<{ id: ObjectID }>
+export type PostRoleResponse = Response<{ id: ObjectId }>
 
-export const postRoleHandler: RequestHandler<{}, PostRoleResponse> = async (
-	req,
-	res
-) => {
-	const parseResult = roleDataSchema.safeParse(req.body)
-	if (!parseResult.success)
-		return res.status(400).send({ error: parseResult.error })
-	const { data } = parseResult
+export const postRoleHandler = (
+	ctx: HandlerContext
+): RequestHandler<{}, PostRoleResponse> => {
+	return async (req, res) => {
+		const parseResult = roleDataSchema.safeParse(req.body)
+		if (!parseResult.success)
+			return res.status(400).send({ error: parseResult.error })
+		const { data } = parseResult
 
-	try {
-		const role = new Role({ data: new RoleData(data) })
-		await roleRepository.save(role)
-		return res.status(201).send({ data: { id: role.id } })
-	} catch (error) {
-		return res.status(500).send({ error })
+		try {
+			const role = new Resource<RoleData>({ data })
+			await ctx.db.roles.insertOne(role.toBson())
+			return res.status(201).send({ data: { id: role._id } })
+		} catch (error) {
+			return res.status(500).send({ error })
+		}
 	}
 }

@@ -26,6 +26,14 @@ export class Meta implements MetaShape {
 		this.edited = edited ?? new Date(Date.now())
 		this.visibility = visibility ?? Visibility.live
 	}
+
+	toBson(): MetaShape {
+		return {
+			created: this.created,
+			edited: this.edited,
+			visibility: this.visibility,
+		}
+	}
 }
 
 export const metaSchema = z.preprocess((value) => {

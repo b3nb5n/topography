@@ -1,22 +1,25 @@
 import { ObjectId } from 'mongodb'
 import { z } from 'zod'
-import { objectIdSchema } from '../schemas'
-import { Meta, metaSchema } from './meta'
+import { Meta, metaShapeSchema } from './meta'
+import { objectIdSchema } from './object-id'
 
-const baseResourceSchema = z.object({
-	id: objectIdSchema,
-	meta: metaSchema,
+const baseResourceShapeSchema = z.object({
+	_id: objectIdSchema,
+	meta: metaShapeSchema,
 })
 
 export const resourceShapeSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-	baseResourceSchema.extend({ data: dataSchema })
+	baseResourceShapeSchema.extend({ data: dataSchema })
 
-export type ResourceShape<T> = z.TypeOf<typeof baseResourceSchema> & { data: T }
+export type ResourceShape<T> = z.TypeOf<typeof baseResourceShapeSchema> & {
+	data: T
+}
+
 type ResourceConstructorData<T> = Pick<ResourceShape<T>, 'data'> &
 	Partial<ResourceShape<T>>
 
 export class Resource<T> implements ResourceShape<T> {
-	readonly id: ObjectId
+	readonly _id: ObjectId
 	readonly meta: Meta
 	private _data: T
 
@@ -29,10 +32,18 @@ export class Resource<T> implements ResourceShape<T> {
 		this._data = value
 	}
 
-	constructor({ id, meta, data }: ResourceConstructorData<T>) {
-		this.id = id ?? new ObjectId()
-		this.meta = meta ?? new Meta()
+	constructor({ _id, meta, data }: ResourceConstructorData<T>) {
+		this._id = _id ?? new ObjectId()
+		this.meta = new Meta(meta)
 		this._data = data
+	}
+
+	toBson(): ResourceShape<T> {
+		return {
+			_id: this._id,
+			meta: this.meta.toBson(),
+			data: this._data,
+		}
 	}
 }
 

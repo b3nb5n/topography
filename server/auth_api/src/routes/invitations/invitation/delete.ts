@@ -1,6 +1,7 @@
 import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
-import { invitationRepository } from '../../../data-source'
+import { ObjectId } from 'mongodb'
+import { HandlerContext } from '../..'
 
 export type DeleteInvitationResponse = Response
 
@@ -8,20 +9,21 @@ interface DeleteInvitationParams {
 	id: string
 }
 
-export const deleteInvitationHandler: RequestHandler<
-	DeleteInvitationParams,
-	DeleteInvitationResponse
-> = async (req, res) => {
-	const { id } = req.params
+export const deleteInvitationHandler = (
+	ctx: HandlerContext
+): RequestHandler<DeleteInvitationParams, DeleteInvitationResponse> => {
+	return async (req, res) => {
+		const _id = new ObjectId(req.params.id)
 
-	try {
-		const result = await invitationRepository.deleteOne({ id })
-		if (!result.deletedCount)
-			return res.status(404).send({ error: ERRORS.NOT_FOUND })
-		if (!result.result.ok) throw ERRORS.UNKNOWN
+		try {
+			const result = await ctx.db.invitations.deleteOne({ _id })
+			if (!result.deletedCount)
+				return res.status(404).send({ error: ERRORS.NOT_FOUND })
+			if (!result.acknowledged) throw ERRORS.UNKNOWN
 
-		return res.send({})
-	} catch (error) {
-		return res.status(500).send({ error })
+			return res.send({})
+		} catch (error) {
+			return res.status(500).send({ error })
+		}
 	}
 }

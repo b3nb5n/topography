@@ -1,14 +1,23 @@
 import { Router } from 'express'
+import { DB } from '../db'
 import invitationsRouter from './invitations'
 import rolesRouter from './roles'
 import tokenRouter from './token'
 import usersRouter from './users'
 
-const router = Router()
+export interface HandlerContext {
+	db: DB
+}
 
-router.use('/invitations', invitationsRouter)
-router.use('/users', usersRouter)
-router.use('/roles', rolesRouter)
-router.use('/token', tokenRouter)
+const router = (ctx: HandlerContext) => {
+	const router = Router()
+
+	router.use('/invitations', invitationsRouter(ctx))
+	router.use('/users', usersRouter(ctx))
+	router.use('/roles', rolesRouter(ctx))
+	router.use('/token', tokenRouter(ctx))
+
+	return router
+}
 
 export default router
