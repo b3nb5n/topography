@@ -1,5 +1,5 @@
 {
-	"name": "@topography/client",
+	"name": "@topography/web_client",
 	"private": true,
 	"version": "0.1.0",
 	"scripts": {

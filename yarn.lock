@@ -1780,9 +1780,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@topography/auth_api@workspace:^, @topography/auth_api@workspace:server/auth_api":
+"@topography/auth_api@workspace:^, @topography/auth_api@workspace:api/auth":
   version: 0.0.0-use.local
-  resolution: "@topography/auth_api@workspace:server/auth_api"
+  resolution: "@topography/auth_api@workspace:api/auth"
   dependencies:
     "@topography/common": "workspace:^"
     "@types/bcrypt": ^5.0.0
@@ -1802,9 +1802,36 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@topography/client@workspace:client":
+"@topography/common@workspace:^, @topography/common@workspace:common":
   version: 0.0.0-use.local
-  resolution: "@topography/client@workspace:client"
+  resolution: "@topography/common@workspace:common"
+  dependencies:
+    mongodb: ^4.6.0
+    tsup: ^5.12.7
+    zod: ^3.16.0
+  languageName: unknown
+  linkType: soft
+
+"@topography/content_api@workspace:api/content":
+  version: 0.0.0-use.local
+  resolution: "@topography/content_api@workspace:api/content"
+  dependencies:
+    "@topography/common": "workspace:^"
+    "@types/express": ^4.17.13
+    "@types/node": ^17.0.25
+    body-parser: ^1.20.0
+    express: ^4.17.3
+    json-schema-to-zod: ^0.0.0-beta.0
+    ts-node-dev: ^1.1.8
+    typescript: ^4.6.3
+    uid: ^2.0.0
+    zod: ^3.16.0
+  languageName: unknown
+  linkType: soft
+
+"@topography/web_client@workspace:client/web":
+  version: 0.0.0-use.local
+  resolution: "@topography/web_client@workspace:client/web"
   dependencies:
     "@hookform/resolvers": ^2.8.8
     "@mantine/core": ^4.2.1
@@ -1822,33 +1849,6 @@ __metadata:
     vite: ^2.9.2
     zod: ^3.16.0
     zod-to-json-schema: ^3.11.3
-  languageName: unknown
-  linkType: soft
-
-"@topography/common@workspace:^, @topography/common@workspace:common":
-  version: 0.0.0-use.local
-  resolution: "@topography/common@workspace:common"
-  dependencies:
-    mongodb: ^4.6.0
-    tsup: ^5.12.7
-    zod: ^3.16.0
-  languageName: unknown
-  linkType: soft
-
-"@topography/content_api@workspace:server/content_api":
-  version: 0.0.0-use.local
-  resolution: "@topography/content_api@workspace:server/content_api"
-  dependencies:
-    "@topography/common": "workspace:^"
-    "@types/express": ^4.17.13
-    "@types/node": ^17.0.25
-    body-parser: ^1.20.0
-    express: ^4.17.3
-    json-schema-to-zod: ^0.0.0-beta.0
-    ts-node-dev: ^1.1.8
-    typescript: ^4.6.3
-    uid: ^2.0.0
-    zod: ^3.16.0
   languageName: unknown
   linkType: soft
 

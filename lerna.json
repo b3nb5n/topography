@@ -1,6 +1,6 @@
 {
-	"packages": ["client", "prisma", "server/*", "common/*"],
-	"version": "0.0.0",
+	"packages": ["api/*", "client/*", "common"],
+	"version": "0.1.0",
 	"npmClient": "yarn",
 	"useWorkspaces": true
 }
