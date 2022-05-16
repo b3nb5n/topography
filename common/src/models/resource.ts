@@ -16,19 +16,31 @@ export const resourceShapeSchema = <
 		data: dataSchema,
 	})
 
-export interface ResourceShape<Data extends {}, Extension extends {} = {}> {
+export interface ResourceShape<
+	Data extends {},
+	Extension extends {} | undefined = undefined
+> {
 	_id: ObjectId
 	meta: Meta<Extension>
 	data: Data
 }
 
-interface ResourceConstructorData<Data extends {}, Extension extends {} = {}> {
-	_id?: ObjectId
-	meta?: Partial<Meta> & Extension
-	data: Data
-}
+type ResourceConstructorData<
+	Data extends {},
+	Extension extends {} | undefined = undefined
+> = Extension extends undefined
+	? {
+			_id?: ObjectId
+			meta?: Partial<Meta<Extension>> & Extension
+			data: Data
+	  }
+	: {
+			_id?: ObjectId
+			meta: Partial<Meta<Extension>> & Extension
+			data: Data
+	  }
 
-export class Resource<Data extends {}, Extension extends {}>
+export class Resource<Data extends {}, Extension extends {} | undefined = undefined>
 	implements ResourceShape<Data, Extension>
 {
 	readonly _id: ObjectId
@@ -50,11 +62,11 @@ export class Resource<Data extends {}, Extension extends {}>
 
 	constructor({ _id, meta, data }: ResourceConstructorData<Data, Extension>) {
 		this._id = _id ?? new ObjectId()
-		this.meta = newMeta(meta ?? {}) as Meta<Extension>
+		this.meta = newMeta(meta) as Meta<Extension>
 		this._data = data
 	}
 
-	toBson(): ResourceShape<Data> {
+	toBson(): ResourceShape<Data, Extension> {
 		return {
 			_id: this._id,
 			meta: this.meta,
@@ -83,4 +95,4 @@ export const resourceSchema = <
 		if (dataParseResult.success) return dataParseResult.success
 
 		return value
-	}, z.instanceof<new (_: ResourceConstructorData<z.TypeOf<DataSchema>>) => Resource<z.TypeOf<DataSchema>, z.TypeOf<ExtensionSchema>>>(Resource))
+	}, z.instanceof<new (_: ResourceConstructorData<z.TypeOf<DataSchema>, z.TypeOf<ExtensionSchema>>) => Resource<z.TypeOf<DataSchema>, z.TypeOf<ExtensionSchema>>>(Resource))

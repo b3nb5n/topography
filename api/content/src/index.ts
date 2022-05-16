@@ -7,7 +7,7 @@ const main = async () => {
 	const db = await connectDB()
 	const app = express()
 	app.use(json({ type: 'application/json' }))
-	app.use('/', router)
+	app.use('/', router({ db }))
 
 	const PORT = process.env.PORT ?? 8080
 	app.listen(PORT, () => console.log(`Content API running on port ${PORT}`))
