@@ -1,8 +1,10 @@
 import { json } from 'body-parser'
 import express from 'express'
+import connectDB from './db'
 import router from './routes'
 
 const main = async () => {
+	const db = await connectDB()
 	const app = express()
 	app.use(json({ type: 'application/json' }))
 	app.use('/', router)

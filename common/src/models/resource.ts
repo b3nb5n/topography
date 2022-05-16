@@ -23,6 +23,10 @@ export class Resource<T> implements ResourceShape<T> {
 	readonly meta: Meta
 	private _data: T
 
+	get id() {
+		return this._id.toString()
+	}
+
 	get data() {
 		return this._data
 	}

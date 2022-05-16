@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { z } from 'zod'
+import { HandlerContext } from '..'
 import validateResourceId from '../../middleware/validate-resource-id'
 import getResources from './get'
 import postResource from './post'
@@ -7,7 +8,7 @@ import deleteResource from './{id}/delete'
 import getResource from './{id}/get'
 import patchResource from './{id}/patch'
 
-export interface ResourceHandlerContext {
+export type ResourceHandlerContext = HandlerContext & {
 	dataSchema: z.AnyZodObject
 }
 

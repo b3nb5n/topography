@@ -16,6 +16,7 @@ const postResource = (
 			const resource = new Resource({ data: parseResult.data })
 
 			// TODO: save resource to db
+			ctx.db.
 
 			return res.status(201).send({ data: { id: resource.id } })
 		} catch (error) {

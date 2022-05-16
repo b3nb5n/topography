@@ -6,7 +6,7 @@ const App: React.FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='signin' element={<SigninPage />} />
+				<Route path='sign-in' element={<SigninPage />} />
 
 				<Route path='*' element='404' />
 			</Routes>
