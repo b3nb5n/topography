@@ -7,38 +7,27 @@ export enum Visibility {
 	deleted,
 }
 
-export const metaShapeSchema = z.object({
+const baseMetaSchema = z.object({
 	created: z.date(),
 	edited: z.date(),
 	visibility: z.nativeEnum(Visibility),
 })
 
-export type MetaShape = z.TypeOf<typeof metaShapeSchema>
+export const metaSchema = <ExtensionSchema extends z.AnyZodObject>(
+	extensionSchema: ExtensionSchema
+) => baseMetaSchema.merge(extensionSchema)
 
-export class Meta implements MetaShape {
-	created: Date
-	edited: Date
-	visibility: Visibility
+export type Meta<Extension extends {} = {}> = Extension &
+	z.TypeOf<typeof baseMetaSchema>
 
-	constructor(data: Partial<MetaShape> = {}) {
-		const { created, edited, visibility } = data
-		this.created = created ?? new Date(Date.now())
-		this.edited = edited ?? new Date(Date.now())
-		this.visibility = visibility ?? Visibility.live
-	}
+export const newMeta = <T extends {}>(data: Partial<Meta<T>> & T) => {
+	const { created, edited, visibility, ...extension } = data
 
-	toBson(): MetaShape {
-		return {
-			created: this.created,
-			edited: this.edited,
-			visibility: this.visibility,
-		}
+	return {
+		created: created ?? new Date(Date.now()),
+		edited: edited ?? new Date(Date.now()),
+		visibility: visibility ?? Visibility.live,
+		...extension,
 	}
 }
 
-export const metaSchema = z.preprocess((value) => {
-	if (value instanceof Meta) return value
-	const parseResult = metaShapeSchema.safeParse(value)
-	if (!parseResult.success) return value
-	return new Meta(parseResult.data)
-}, z.instanceof(Meta))

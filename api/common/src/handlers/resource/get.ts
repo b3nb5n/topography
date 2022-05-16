@@ -1,12 +1,13 @@
 import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
+import { z } from 'zod'
 import { ResourceHandlerContext } from '.'
 
 export type GetResourcesResponse<T> = Response<Array<T>>
 
-export const getResources = (
-	ctx: ResourceHandlerContext
-): RequestHandler<{}, GetResourcesResponse<any>> => {
+export const getResources = <T extends z.AnyZodObject>(
+	ctx: ResourceHandlerContext<T>
+): RequestHandler<{}, GetResourcesResponse<z.TypeOf<T>>> => {
 	return async (_req, res) => {
 		try {
 			const resources = await ctx.collection.find({}).toArray()

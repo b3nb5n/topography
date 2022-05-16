@@ -31,3 +31,4 @@ export const resourceRouter = <T extends z.AnyZodObject>(
 export * from './:id'
 export * from './get'
 export * from './post'
+

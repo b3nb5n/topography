@@ -1,13 +1,14 @@
 import { Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ObjectId } from 'mongodb'
+import { z } from 'zod'
 import { HandlerParams } from '.'
 import { ResourceHandlerContext } from '..'
 
 export type DeleteResourceResponse = Response
 
-export const deleteResource = (
-	ctx: ResourceHandlerContext
+export const deleteResource = <T extends z.AnyZodObject>(
+	ctx: ResourceHandlerContext<T>
 ): RequestHandler<HandlerParams, DeleteResourceResponse> => {
 	return async (req, res) => {
 		try {
