@@ -1780,6 +1780,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@topography/api@workspace:^, @topography/api@workspace:api/common":
+  version: 0.0.0-use.local
+  resolution: "@topography/api@workspace:api/common"
+  dependencies:
+    express: ^4.18.1
+    mongodb: ^4.6.0
+    tsup: ^5.12.7
+    zod: ^3.16.0
+  languageName: unknown
+  linkType: soft
+
 "@topography/auth_api@workspace:^, @topography/auth_api@workspace:api/auth":
   version: 0.0.0-use.local
   resolution: "@topography/auth_api@workspace:api/auth"
@@ -1817,6 +1828,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@topography/content_api@workspace:api/content"
   dependencies:
+    "@topography/api": "workspace:^"
     "@topography/common": "workspace:^"
     "@types/express": ^4.17.13
     "@types/node": ^17.0.25
@@ -3755,7 +3767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.3":
+"express@npm:^4.17.3, express@npm:^4.18.1":
   version: 4.18.1
   resolution: "express@npm:4.18.1"
   dependencies:

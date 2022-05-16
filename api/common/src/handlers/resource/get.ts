@@ -4,18 +4,15 @@ import { ResourceHandlerContext } from '.'
 
 export type GetResourcesResponse<T> = Response<Array<T>>
 
-const getResources = (
-	_ctx: ResourceHandlerContext
+export const getResources = (
+	ctx: ResourceHandlerContext
 ): RequestHandler<{}, GetResourcesResponse<any>> => {
-	return (_req, res) => {
+	return async (_req, res) => {
 		try {
-			// TODO: get resources from the db
-
-			return res.send({ data: [] })
+			const resources = await ctx.collection.find({}).toArray()
+			return res.send({ data: resources })
 		} catch (error) {
 			return res.status(500).send({ error })
 		}
 	}
 }
-
-export default getResources

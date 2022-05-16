@@ -1,8 +1,7 @@
+import { resourceRouter } from '@topography/api'
 import { Router } from 'express'
-import { z } from 'zod'
 import { DB } from '../db'
 import { collectionDataSchema, propertyDataSchema } from '../models'
-import resourceRouter from './resource'
 
 export interface HandlerContext {
 	db: DB
@@ -13,15 +12,18 @@ const router = (ctx: HandlerContext) => {
 
 	router.use(
 		'/properties',
-		resourceRouter({ ...ctx, dataSchema: propertyDataSchema })
+		resourceRouter({
+			dataSchema: propertyDataSchema,
+			collection: ctx.db.properties,
+		})
 	)
+
 	router.use(
 		'/collections',
-		resourceRouter({ ...ctx, dataSchema: collectionDataSchema })
-	)
-	router.use(
-		'/items',
-		resourceRouter({ ...ctx, dataSchema: z.object({}).passthrough() })
+		resourceRouter({
+			dataSchema: collectionDataSchema,
+			collection: ctx.db.collections,
+		})
 	)
 
 	return router

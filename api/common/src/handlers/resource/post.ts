@@ -4,7 +4,7 @@ import { ResourceHandlerContext } from '.'
 
 export type PostResourceResponse = Response<{ id: string }>
 
-const postResource = (
+export const postResource = (
 	ctx: ResourceHandlerContext
 ): RequestHandler<{}, PostResourceResponse> => {
 	return async (req, res) => {
@@ -12,17 +12,12 @@ const postResource = (
 			const parseResult = ctx.dataSchema.safeParse(req.body)
 			if (!parseResult.success)
 				return res.status(400).send({ error: parseResult.error })
-
 			const resource = new Resource({ data: parseResult.data })
 
-			// TODO: save resource to db
-			ctx.db.
-
+			await ctx.collection.insertOne(resource.toBson())
 			return res.status(201).send({ data: { id: resource.id } })
 		} catch (error) {
 			return res.status(500).send({ error })
 		}
 	}
 }
-
-export default postResource
