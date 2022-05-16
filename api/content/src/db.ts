@@ -1,6 +1,6 @@
-import { Resource } from '@topography/common'
+import { ResourceShape } from '@topography/common'
 import { MongoClient } from 'mongodb'
-import { CollectionData, PropertyData } from './models'
+import { CollectionShape, PropertyShape } from './models'
 
 const connectDB = async () => {
 	const client = new MongoClient('mongodb://localhost:27017')
@@ -8,9 +8,9 @@ const connectDB = async () => {
 	const db = client.db('content')
 
 	return {
-		properties: db.collection<PropertyData>('properties'),
-		collections: db.collection<CollectionData>('collections'),
-		items: db.collection<Resource<any>>('items'),
+		properties: db.collection<PropertyShape>('properties'),
+		collections: db.collection<CollectionShape>('collections'),
+		items: db.collection<ResourceShape<any>>('items'),
 	}
 }
 
