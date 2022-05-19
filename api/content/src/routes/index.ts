@@ -1,4 +1,4 @@
-import { resourceRouter } from '@topography/api'
+import { resourceRouter, validateResourceIdHandler } from '@topography/api'
 import { Router } from 'express'
 import { DB } from '../db'
 import { collectionDataSchema, propertyDataSchema } from '../models'
@@ -9,6 +9,8 @@ export interface HandlerContext {
 
 const router = (ctx: HandlerContext) => {
 	const router = Router()
+
+	router.use('/', validateResourceIdHandler)
 
 	router.use(
 		'/properties',

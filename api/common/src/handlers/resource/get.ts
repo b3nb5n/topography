@@ -5,7 +5,7 @@ import { ResourceHandlerContext } from '.'
 
 export type GetResourcesResponse<T> = Response<Array<T>>
 
-export const getResources = <T extends z.AnyZodObject>(
+export const getResourcesHandler = <T extends z.AnyZodObject>(
 	ctx: ResourceHandlerContext<T>
 ): RequestHandler<{}, GetResourcesResponse<z.TypeOf<T>>> => {
 	return async (_req, res) => {

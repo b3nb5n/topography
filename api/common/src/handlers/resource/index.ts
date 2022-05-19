@@ -2,11 +2,11 @@ import { ResourceShape } from '@topography/common'
 import { Router } from 'express'
 import { Collection } from 'mongodb'
 import { z } from 'zod'
-import { deleteResource } from './:id/delete'
-import { getResource } from './:id/get'
-import { patchResource } from './:id/patch'
-import { getResources } from './get'
-import { postResource } from './post'
+import { deleteResourceHandler } from './:id/delete'
+import { getResourceHandler } from './:id/get'
+import { patchResourceHandler } from './:id/patch'
+import { getResourcesHandler } from './get'
+import { postResourceHandler } from './post'
 
 export interface ResourceHandlerContext<T extends z.AnyZodObject> {
 	collection: Collection<ResourceShape<z.TypeOf<T>>>
@@ -18,12 +18,12 @@ export const resourceRouter = <T extends z.AnyZodObject>(
 ) => {
 	const router = Router()
 
-	router.get('/', getResources(ctx))
-	router.post('/', postResource(ctx))
+	router.get('/', getResourcesHandler(ctx))
+	router.post('/', postResourceHandler(ctx))
 
-	router.get('/:id', getResource(ctx))
-	router.patch('/:id', patchResource(ctx))
-	router.delete('/:id', deleteResource(ctx))
+	router.get('/:id', getResourceHandler(ctx))
+	router.patch('/:id', patchResourceHandler(ctx))
+	router.delete('/:id', deleteResourceHandler(ctx))
 
 	return router
 }

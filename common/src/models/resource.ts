@@ -4,11 +4,11 @@ import { Meta, metaSchema, newMeta } from './meta'
 import { objectIdSchema } from './object-id'
 
 export const resourceShapeSchema = <
-	DataSchema extends z.AnyZodObject,
-	ExtensionSchema extends z.AnyZodObject
+	D extends z.AnyZodObject,
+	M extends z.AnyZodObject = z.ZodObject<{}, 'passthrough'>
 >(
-	dataSchema: DataSchema,
-	metaExtensionSchema: ExtensionSchema
+	dataSchema: D,
+	metaExtensionSchema: M = z.object({}) as M
 ) =>
 	z.object({
 		_id: objectIdSchema,
@@ -16,36 +16,33 @@ export const resourceShapeSchema = <
 		data: dataSchema,
 	})
 
-export interface ResourceShape<
-	Data extends {},
-	Extension extends {} | undefined = undefined
-> {
+export interface ResourceShape<D extends {}, M extends {} | undefined = undefined> {
 	_id: ObjectId
-	meta: Meta<Extension>
-	data: Data
+	meta: Meta<M>
+	data: D
 }
 
 type ResourceConstructorData<
-	Data extends {},
-	Extension extends {} | undefined = undefined
-> = Extension extends undefined
+	D extends {},
+	E extends {} | undefined = undefined
+> = E extends undefined
 	? {
 			_id?: ObjectId
-			meta?: Partial<Meta<Extension>> & Extension
-			data: Data
+			meta?: Partial<Meta<E>> & E
+			data: D
 	  }
 	: {
 			_id?: ObjectId
-			meta: Partial<Meta<Extension>> & Extension
-			data: Data
+			meta: Partial<Meta<E>> & E
+			data: D
 	  }
 
-export class Resource<Data extends {}, Extension extends {} | undefined = undefined>
-	implements ResourceShape<Data, Extension>
+export class Resource<D extends {}, M extends {} | undefined = undefined>
+	implements ResourceShape<D, M>
 {
 	readonly _id: ObjectId
-	readonly meta: Meta<Extension>
-	private _data: Data
+	readonly meta: Meta<M>
+	private _data: D
 
 	get id() {
 		return this._id.toString()
@@ -55,34 +52,39 @@ export class Resource<Data extends {}, Extension extends {} | undefined = undefi
 		return this._data
 	}
 
-	set data(value: Data) {
-		this.meta.edited = new Date(Date.now())
-		this._data = value
-	}
-
-	constructor({ _id, meta, data }: ResourceConstructorData<Data, Extension>) {
+	constructor({ _id, meta, data }: ResourceConstructorData<D, M>) {
 		this._id = _id ?? new ObjectId()
-		this.meta = newMeta(meta) as Meta<Extension>
+		this.meta = newMeta(meta) as Meta<M>
 		this._data = data
 	}
 
-	toBson(): ResourceShape<Data, Extension> {
+	toBson(): ResourceShape<D, M> {
 		return {
 			_id: this._id,
 			meta: this.meta,
 			data: this._data,
 		}
 	}
+
+	update(data: Partial<D>) {
+		this._data = { ...this._data, ...data }
+		this.meta.edited.setTime(Date.now())
+	}
 }
 
 export const resourceSchema = <
-	DataSchema extends z.AnyZodObject,
-	ExtensionSchema extends z.AnyZodObject
+	D extends z.AnyZodObject,
+	M extends z.AnyZodObject | undefined = undefined
 >(
-	dataSchema: DataSchema,
-	metaExtensionSchema: ExtensionSchema
-) =>
-	z.preprocess((value) => {
+	dataSchema: D,
+	metaExtensionSchema?: M
+) => {
+	type MetaExtension = M extends z.AnyZodObject ? M : z.ZodObject<{}, 'passthrough'>
+	type MetaExtensionShape = M extends z.AnyZodObject
+		? z.TypeOf<MetaExtension>
+		: undefined
+
+	return z.preprocess((value) => {
 		if (value instanceof Resource) return value
 
 		const resourceParseResult = resourceShapeSchema(
@@ -95,4 +97,5 @@ export const resourceSchema = <
 		if (dataParseResult.success) return dataParseResult.success
 
 		return value
-	}, z.instanceof<new (_: ResourceConstructorData<z.TypeOf<DataSchema>, z.TypeOf<ExtensionSchema>>) => Resource<z.TypeOf<DataSchema>, z.TypeOf<ExtensionSchema>>>(Resource))
+	}, z.instanceof<new (_: ResourceConstructorData<z.TypeOf<D>, MetaExtensionShape>) => Resource<z.TypeOf<D>, MetaExtensionShape>>(Resource))
+}

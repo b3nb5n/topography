@@ -6,7 +6,7 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsc && node scripts/import-extension.cjs",
+		"build": "tsc",
 		"dev": "ts-node-dev --rs --respawn --exit-child --transpile-only src"
 	},
 	"dependencies": {

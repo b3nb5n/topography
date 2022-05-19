@@ -7,7 +7,7 @@ import { ResourceHandlerContext } from '..'
 
 export type DeleteResourceResponse = Response
 
-export const deleteResource = <T extends z.AnyZodObject>(
+export const deleteResourceHandler = <T extends z.AnyZodObject>(
 	ctx: ResourceHandlerContext<T>
 ): RequestHandler<HandlerParams, DeleteResourceResponse> => {
 	return async (req, res) => {

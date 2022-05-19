@@ -25,10 +25,10 @@ export const acceptInvitationHandler = (
 			if (!deleteResult.ok) throw deleteResult.lastErrorObject
 			const invitation = invitationSchema.parse(deleteResult.value)
 
-			const user: User = new Resource({
-				_id: invitation._id,
-				data: { ...data, ...invitation.data },
-			})
+		const user: User = new Resource({
+			_id: invitation._id,
+			data: { ...data, ...invitation.data },
+		})
 
 			await ctx.db.users.insertOne(user.toBson())
 

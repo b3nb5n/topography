@@ -13,35 +13,31 @@ const baseMetaSchema = z.object({
 	visibility: z.nativeEnum(Visibility),
 })
 
-export const metaSchema = <
-	ExtensionSchema extends z.AnyZodObject | undefined = undefined
->(
-	extensionSchema?: ExtensionSchema
-): ExtensionSchema extends z.AnyZodObject
+export const metaSchema = <E extends z.AnyZodObject | undefined = undefined>(
+	extensionSchema?: E
+): E extends z.AnyZodObject
 	? z.ZodObject<
-			extendShape<typeof baseMetaSchema['_shape'], ExtensionSchema['_shape']>,
-			ExtensionSchema['_unknownKeys'],
-			ExtensionSchema['_catchall']
+			extendShape<typeof baseMetaSchema['_shape'], E['_shape']>,
+			E['_unknownKeys'],
+			E['_catchall']
 	  >
 	: typeof baseMetaSchema =>
 	extensionSchema ? baseMetaSchema.merge(extensionSchema) : (baseMetaSchema as any)
 
-export type Meta<Extension extends {} | undefined = undefined> =
-	Extension extends {}
-		? Extension & z.TypeOf<typeof baseMetaSchema>
-		: z.TypeOf<typeof baseMetaSchema>
+export type Meta<E extends {} | undefined = undefined> = E extends {}
+	? E & z.TypeOf<typeof baseMetaSchema>
+	: z.TypeOf<typeof baseMetaSchema>
 
-type MetaConstructorData<Extension extends {} | undefined = undefined> =
-	Extension extends {}
-		? Partial<Meta<Extension>> & Extension
-		: Partial<Meta> | undefined
+type MetaConstructorData<E extends {} | undefined = undefined> = E extends {}
+	? Partial<Meta<E>> & E
+	: Partial<Meta> | undefined
 
-export const newMeta = <Extension extends {} | undefined = undefined>(
-	data: MetaConstructorData<Extension>
+export const newMeta = <E extends {} | undefined = undefined>(
+	data: MetaConstructorData<E>
 ) =>
 	({
 		created: data?.created ?? new Date(Date.now()),
 		edited: data?.edited ?? new Date(Date.now()),
 		visibility: data?.visibility ?? Visibility.live,
 		...data,
-	} as Meta<Extension>)
+	} as Meta<E>)
