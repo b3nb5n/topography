@@ -1,7 +1,8 @@
 import { resourceRouter, validateResourceIdHandler } from '@topography/api'
 import { Router } from 'express'
 import { DB } from '../db'
-import { collectionDataSchema, propertyDataSchema } from '../models'
+import { propertyDataSchema } from '../models'
+import itemsRouter from './items'
 
 export interface HandlerContext {
 	db: DB
@@ -9,6 +10,11 @@ export interface HandlerContext {
 
 const router = (ctx: HandlerContext) => {
 	const router = Router()
+
+	router.use('/', (req, _res, next) => {
+		console.log(req.url)
+		next()
+	})
 
 	router.use('/', validateResourceIdHandler)
 
@@ -20,13 +26,15 @@ const router = (ctx: HandlerContext) => {
 		})
 	)
 
-	router.use(
-		'/collections',
-		resourceRouter({
-			dataSchema: collectionDataSchema,
-			collection: ctx.db.collections,
-		})
-	)
+	router.use('/collections/:collectionId/items', itemsRouter)
+
+	// router.use(
+	// 	'/collections',
+	// 	resourceRouter({
+	// 		dataSchema: collectionDataSchema,
+	// 		collection: ctx.db.collections,
+	// 	})
+	// )
 
 	return router
 }

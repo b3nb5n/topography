@@ -1,4 +1,5 @@
 import { json } from 'body-parser'
+import 'dotenv/config'
 import express from 'express'
 import connectDB from './db'
 import router from './routes'

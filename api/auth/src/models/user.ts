@@ -6,15 +6,21 @@ import {
 import { string, z } from 'zod'
 
 export const userDataSchema = z.object({
-	roleId: objectIdSchema,
 	firstName: z.string(),
 	lastName: string(),
 	email: z.string().email(),
 	password: z.string(),
 })
 
-export const userShapeSchema = resourceShapeSchema(userDataSchema)
-export const userSchema = resourceSchema(userDataSchema)
+export const userMetaExtensionSchema = z.object({
+	roleId: objectIdSchema,
+})
+
+export const userShapeSchema = resourceShapeSchema(
+	userDataSchema,
+	userMetaExtensionSchema
+)
+export const userSchema = resourceSchema(userDataSchema, userMetaExtensionSchema)
 
 export type UserData = z.TypeOf<typeof userDataSchema>
 export type UserShape = z.TypeOf<typeof userShapeSchema>

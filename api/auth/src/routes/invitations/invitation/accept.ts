@@ -1,8 +1,9 @@
-import { Resource, Response } from '@topography/common'
+import { ERRORS, Resource, Response } from '@topography/common'
+import { hashSync } from 'bcrypt'
 import { RequestHandler } from 'express'
 import { ObjectId } from 'mongodb'
 import { HandlerContext } from '../..'
-import { invitationSchema, User, userDataSchema } from '../../../models'
+import { User, userDataSchema } from '../../../models'
 
 export type AcceptInvitationResponse = Response
 
@@ -15,7 +16,7 @@ export const acceptInvitationHandler = (
 ): RequestHandler<AcceptInvitationParams, AcceptInvitationResponse> => {
 	return async (req, res) => {
 		const _id = new ObjectId(req.params.id)
-		const parseResult = userDataSchema.omit({ roleId: true }).safeParse(req.body)
+		const parseResult = userDataSchema.safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
@@ -23,14 +24,18 @@ export const acceptInvitationHandler = (
 		try {
 			const deleteResult = await ctx.db.invitations.findOneAndDelete({ _id })
 			if (!deleteResult.ok) throw deleteResult.lastErrorObject
-			const invitation = invitationSchema.parse(deleteResult.value)
 
-		const user: User = new Resource({
-			_id: invitation._id,
-			data: { ...data, ...invitation.data },
-		})
+			const invitation = deleteResult.value
+			if (!invitation) return res.status(404).send({ error: ERRORS.NOT_FOUND })
 
-			await ctx.db.users.insertOne(user.toBson())
+			const user: User = new Resource({
+				_id: invitation._id,
+				data: { ...data, ...invitation.data, password: hashSync(data.password, 6) },
+				meta: { roleId: invitation.data.roleId },
+			})
+
+			const insertResult = await ctx.db.users.insertOne(user.toBson())
+			if (!insertResult.acknowledged) throw ERRORS.UNKNOWN
 
 			return res.send({})
 		} catch (error) {

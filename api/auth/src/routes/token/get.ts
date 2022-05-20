@@ -31,6 +31,8 @@ export const getTokenHandler = (
 			if (!user)
 				return res.status(404).send({ error: 'unknown account identifier' })
 
+			console.log(user)
+
 			const passwordMatches = await bcrypt.compare(
 				data.password,
 				user.data.password

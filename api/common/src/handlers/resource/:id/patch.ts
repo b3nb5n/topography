@@ -1,9 +1,10 @@
-import { ERRORS, Resource, Response } from '@topography/common'
+import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ObjectId } from 'mongodb'
 import { z } from 'zod'
 import { HandlerParams } from '.'
 import { ResourceHandlerContext } from '..'
+import { flattenDocument } from '../../../utils/flatten-document'
 
 export type PatchResourceResponse = Response
 
@@ -17,13 +18,14 @@ export const patchResourceHandler = <T extends z.AnyZodObject>(
 			if (!parseResult.success)
 				return res.status(400).send({ error: parseResult.error })
 
-			const doc = await ctx.collection.findOne({ _id })
-			if (!doc) return res.status(404).send({ error: ERRORS.NOT_FOUND })
+			const result = await ctx.collection.updateOne(
+				{ _id },
+				{ $set: flattenDocument({ data: parseResult.data }) }
+			)
 
-			const resource = new Resource(doc)
-			resource.update(parseResult.data)
+			if (!result.acknowledged) throw ERRORS.UNKNOWN
+			if (!result.modifiedCount) res.status(404).send({ error: ERRORS.NOT_FOUND })
 
-			await ctx.collection.updateOne({ _id }, { $set: resource.toBson() })
 			return res.send({})
 		} catch (error) {
 			return res.status(500).send({ error })

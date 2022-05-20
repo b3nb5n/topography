@@ -79,9 +79,12 @@ export const resourceSchema = <
 	dataSchema: D,
 	metaExtensionSchema?: M
 ) => {
-	type MetaExtension = M extends z.AnyZodObject ? M : z.ZodObject<{}, 'passthrough'>
+	type Data = z.TypeOf<D>
 	type MetaExtensionShape = M extends z.AnyZodObject
-		? z.TypeOf<MetaExtension>
+		? M
+		: z.ZodObject<{}, 'passthrough'>
+	type MetaExtension = M extends z.AnyZodObject
+		? z.TypeOf<MetaExtensionShape>
 		: undefined
 
 	return z.preprocess((value) => {
@@ -91,11 +94,14 @@ export const resourceSchema = <
 			dataSchema,
 			metaExtensionSchema
 		).safeParse(value)
-		if (resourceParseResult.success) return resourceParseResult.data
+		if (resourceParseResult.success)
+			return new Resource(
+				resourceParseResult.data as ResourceConstructorData<Data, MetaExtension>
+			)
 
 		const dataParseResult = dataSchema.safeParse(value)
-		if (dataParseResult.success) return dataParseResult.success
+		if (dataParseResult.success) return new Resource({ data: dataParseResult.data })
 
 		return value
-	}, z.instanceof<new (_: ResourceConstructorData<z.TypeOf<D>, MetaExtensionShape>) => Resource<z.TypeOf<D>, MetaExtensionShape>>(Resource))
+	}, z.instanceof<new (_: ResourceConstructorData<Data, MetaExtension>) => Resource<Data, MetaExtension>>(Resource))
 }

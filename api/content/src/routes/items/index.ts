@@ -8,9 +8,13 @@ export interface ItemsHandlerParams {
 	collectionId: string
 }
 
-export const itemRouter = (ctx: ItemsHandlerContext) => {
+const itemsRouter = (ctx: ItemsHandlerContext) => {
 	const router = Router()
 
 	router.get('/', getItemsHandler(ctx))
 	router.post('/', postItemHandler(ctx))
+
+	return router
 }
+
+export default itemsRouter

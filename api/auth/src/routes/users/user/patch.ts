@@ -1,3 +1,4 @@
+import { flattenDocument } from '@topography/api'
 import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ObjectId } from 'mongodb'
@@ -19,19 +20,27 @@ export const patchUserHandler = (
 		if (id === 'me') id = res.locals.payload.uid
 
 		const parseResult = userDataSchema
-			.omit({ roleId: true })
+			.omit({ roleId: true, email: true, password: true })
 			.partial()
 			.safeParse(req.body)
 		if (!parseResult.success)
 			return res.status(400).send({ error: parseResult.error })
 		const { data } = parseResult
-		if (Object.keys(data).length === 0) res.send({})
+		if (Object.keys(data).length === 0) return res.send({})
 
 		try {
-			await ctx.db.users.updateOne({ _id: new ObjectId(id) }, { data })
+			const result = await ctx.db.users.updateOne(
+				{ _id: new ObjectId(id) },
+				{ $set: flattenDocument({ data }) }
+			)
+
+			if (!result.acknowledged) throw ERRORS.UNKNOWN
+			if (!result.modifiedCount) res.status(404).send({ error: ERRORS.NOT_FOUND })
+
 			return res.send({})
-		} catch {
-			return res.status(500).send({ error: ERRORS.UNKNOWN })
+		} catch (error) {
+			console.log(error)
+			return res.status(500).send({ error })
 		}
 	}
-} 
+}

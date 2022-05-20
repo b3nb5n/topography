@@ -11,11 +11,11 @@ export const itemMetaExtensionSchema = z.object({
 	collection: objectIdSchema,
 })
 
-export const itemShapeSchema = <DataSchema extends z.ZodTypeAny>(
+export const itemShapeSchema = <DataSchema extends z.AnyZodObject>(
 	dataSchema: DataSchema
 ) => resourceShapeSchema(dataSchema, itemMetaExtensionSchema)
 
-export const itemSchema = <DataSchema extends z.ZodTypeAny>(
+export const itemSchema = <DataSchema extends z.AnyZodObject>(
 	dataSchema: DataSchema
 ) => resourceSchema(dataSchema, itemMetaExtensionSchema)
 
