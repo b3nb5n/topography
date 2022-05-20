@@ -14,7 +14,7 @@ export const postItemHandler = ({
 	return async (req, res) => {
 		try {
 			const collectionId = new ObjectId(req.params.collectionId)
-			const collection = db.collections.findOne({ _id: collectionId })
+			const collection = await db.collections.findOne({ _id: collectionId })
 			if (!collection) return res.status(404).send({ error: ERRORS.NOT_FOUND })
 			// TODO: get the collection item schema and validate request body against it
 

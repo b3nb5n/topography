@@ -1,3 +1,4 @@
+import { flattenDocument } from '@topography/api'
 import { ERRORS, Response } from '@topography/common'
 import { RequestHandler } from 'express'
 import { ObjectId } from 'mongodb'
@@ -5,7 +6,7 @@ import { ItemHandlerContext, ItemHandlerParams } from '.'
 
 export type PatchResourceResponse = Response
 
-export const patchResource = ({
+const patchItemHandler = ({
 	db,
 }: ItemHandlerContext): RequestHandler<
 	ItemHandlerParams,
@@ -20,10 +21,18 @@ export const patchResource = ({
 
 			// TODO: get the collection item schema and validate request body against it
 
-			await db.items.updateOne({ _id }, { data: req.body })
+			const result = await db.items.updateOne(
+				{ _id },
+				{ $set: flattenDocument({ data: req.body }) }
+			)
+
+			if (!result.acknowledged) throw ERRORS.UNKNOWN
+			if (!result.modifiedCount) res.status(404).send({ error: ERRORS.NOT_FOUND })
 			return res.send({})
 		} catch (error) {
 			return res.status(500).send({ error })
 		}
 	}
 }
+
+export default patchItemHandler

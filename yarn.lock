@@ -436,12 +436,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "@hookform/resolvers@npm:2.8.8"
+"@hookform/resolvers@npm:^2.8.10":
+  version: 2.8.10
+  resolution: "@hookform/resolvers@npm:2.8.10"
   peerDependencies:
     react-hook-form: ^7.0.0
-  checksum: 3de8b00ba3d085cd29b8d9d41bb17f5e31a483e46dafef98a37d898fbf5f3d19a74729e1cda8d15d7513486b5886ea12fbef0c1aa4ed009e3cf3c804cbe325a2
+  checksum: b707a19ca9a31b4c95b7bcbe720153065497e29c707266ab1a0d136394973aa2cbfe75eda67e225d86321bf007b5afdf9b9988c23586bb6965f00a8f292fc5b4
   languageName: node
   linkType: hard
 
@@ -1289,35 +1289,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^4.2.1":
-  version: 4.2.4
-  resolution: "@mantine/core@npm:4.2.4"
+"@mantine/core@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "@mantine/core@npm:4.2.5"
   dependencies:
-    "@mantine/styles": 4.2.4
+    "@mantine/styles": 4.2.5
     "@popperjs/core": ^2.9.3
     "@radix-ui/react-scroll-area": ^0.1.1
     react-popper: ^2.2.5
     react-textarea-autosize: ^8.3.2
   peerDependencies:
-    "@mantine/hooks": 4.2.4
+    "@mantine/hooks": 4.2.5
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 6206c4129023e3ff2d110f609b7d68165898aefd7aca8d898078c02e402ca1f341750f44c820c45885291f2ef0bacc8fd95b08558644e2d5ddd400817593fc20
+  checksum: c6cc3ec1047b54cf31144c5d244958e88e7b9c673e7f056aaa857f764f3779ed5481bba9f0d7ee6cfff20f9975eb3a72bce7c7b8013995e64fac8beb76adce59
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^4.2.1":
-  version: 4.2.4
-  resolution: "@mantine/hooks@npm:4.2.4"
+"@mantine/hooks@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "@mantine/hooks@npm:4.2.5"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 1b5fc24523d939b41b8b1e179f17b489e2e5eb6a714605c8cdfcdd305c615e66df7c6d52cc334fb06e134ff2cd073e6d0a9c8b100f9e318207714b2d390dea9d
+  checksum: 1a2345a9a502af70b81ec6a8bb8924c00e9a181b147b9ac9557faf7381f139ee73b7675878fd3da2f8559875722f280d0a4ce6f6a045d32c8f29746c4e14afd1
   languageName: node
   linkType: hard
 
-"@mantine/styles@npm:4.2.4":
-  version: 4.2.4
-  resolution: "@mantine/styles@npm:4.2.4"
+"@mantine/styles@npm:4.2.5":
+  version: 4.2.5
+  resolution: "@mantine/styles@npm:4.2.5"
   dependencies:
     "@emotion/cache": 11.7.1
     "@emotion/react": 11.7.1
@@ -1328,7 +1328,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 92c13ec7cc7eb0c995af5795d80d684a700b1b6818f0ed785b8842ecb9c099445ff25e9c56e57a357b6901908a3317fdc60affbf67d1b8996fb705a515dc34c1
+  checksum: 62b45b106dc65b19c87af9f62aa5b1294276436fb232eea837750fcc64c62e5f87a8d14ffd1034ae17943bceed9a79c087b676f0c50dc62eede263b765eeab32
   languageName: node
   linkType: hard
 
@@ -1791,7 +1791,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@topography/auth_api@workspace:^, @topography/auth_api@workspace:api/auth":
+"@topography/auth_api@workspace:api/auth":
   version: 0.0.0-use.local
   resolution: "@topography/auth_api@workspace:api/auth"
   dependencies:
@@ -1809,6 +1809,23 @@ __metadata:
     ts-node-dev: ^1.1.8
     typescript: ^4.6.3
     uid: ^2.0.0
+    zod: ^3.16.0
+  languageName: unknown
+  linkType: soft
+
+"@topography/client@workspace:client/common":
+  version: 0.0.0-use.local
+  resolution: "@topography/client@workspace:client/common"
+  dependencies:
+    "@hookform/resolvers": ^2.8.10
+    "@mantine/core": ^4.2.5
+    "@mantine/hooks": ^4.2.5
+    "@types/react": ^18.0.9
+    "@types/react-dom": ^18.0.4
+    react: ^18.1.0
+    react-dom: ^18.1.0
+    react-hook-form: ^7.31.1
+    typescript: ^4.6.4
     zod: ^3.16.0
   languageName: unknown
   linkType: soft
@@ -1846,12 +1863,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@topography/web_client@workspace:client/web"
   dependencies:
-    "@hookform/resolvers": ^2.8.8
-    "@mantine/core": ^4.2.1
-    "@mantine/hooks": ^4.2.1
-    "@topography/auth_api": "workspace:^"
-    "@types/react": ^18.0.0
-    "@types/react-dom": ^18.0.0
+    "@hookform/resolvers": ^2.8.10
+    "@mantine/core": ^4.2.5
+    "@mantine/hooks": ^4.2.5
+    "@types/react": ^18.0.9
+    "@types/react-dom": ^18.0.4
     "@vitejs/plugin-react": ^1.3.0
     react: ^18.0.0
     react-dom: ^18.0.0
@@ -2004,16 +2020,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0":
-  version: 18.0.3
-  resolution: "@types/react-dom@npm:18.0.3"
+"@types/react-dom@npm:^18.0.4":
+  version: 18.0.4
+  resolution: "@types/react-dom@npm:18.0.4"
   dependencies:
     "@types/react": "*"
-  checksum: 5c87fb610e212f0942ebbf522dfca4c9dc2ac8afa4c601454415e7c42f993518868207faff7658d11974142937ba7af2f80e274c3a3f5e0e697bdd5547dbe1b0
+  checksum: decde42d02a90ac2fe94fd6bfd9c78d002c03762a2d940df9422bf61af89c03d05e2113fd55fe45521fe27fa872a79dfd654b7d6b89652b455425efdcb763c58
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.0":
+"@types/react@npm:*, @types/react@npm:^18.0.9":
   version: 18.0.9
   resolution: "@types/react@npm:18.0.9"
   dependencies:
@@ -6786,7 +6802,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.0.0":
+"react-dom@npm:^18.0.0, react-dom@npm:^18.1.0":
   version: 18.1.0
   resolution: "react-dom@npm:18.1.0"
   dependencies:
@@ -6805,7 +6821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.30.0":
+"react-hook-form@npm:^7.30.0, react-hook-form@npm:^7.31.1":
   version: 7.31.1
   resolution: "react-hook-form@npm:7.31.1"
   peerDependencies:
@@ -6879,7 +6895,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.0.0":
+"react@npm:^18.0.0, react@npm:^18.1.0":
   version: 18.1.0
   resolution: "react@npm:18.1.0"
   dependencies:
@@ -8181,7 +8197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.6.3":
+"typescript@npm:^4.6.3, typescript@npm:^4.6.4":
   version: 4.6.4
   resolution: "typescript@npm:4.6.4"
   bin:
@@ -8191,7 +8207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.4#~builtin<compat/typescript>":
   version: 4.6.4
   resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"
   bin:

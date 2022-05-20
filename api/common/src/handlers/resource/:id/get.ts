@@ -14,7 +14,7 @@ export const getResourceHandler = <T extends z.AnyZodObject>(
 		try {
 			const _id = new ObjectId(req.params.id)
 			const resource = await ctx.collection.findOne({ _id })
-			if (!resource) res.status(404).send({ error: ERRORS.NOT_FOUND })
+			if (!resource) return res.status(404).send({ error: ERRORS.NOT_FOUND })
 			return res.status(200).send({ data: resource })
 		} catch (error) {
 			return res.status(500).send({ error })

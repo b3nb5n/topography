@@ -1,12 +1,12 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import SigninPage from './pages/signin'
+import SignInPage from './pages/sign-in'
 
 const App: React.FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='sign-in' element={<SigninPage />} />
+				<Route path='sign-in' element={<SignInPage />} />
 
 				<Route path='*' element='404' />
 			</Routes>
