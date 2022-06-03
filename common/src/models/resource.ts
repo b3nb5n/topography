@@ -55,7 +55,7 @@ export class Resource<D extends {}, M extends {} | undefined = undefined>
 
 	toBson() {
 		return {
-			id: new ObjectId(this.id),
+			_id: new ObjectId(this.id),
 			meta: this.meta,
 			data: this._data,
 		}

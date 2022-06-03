@@ -8,11 +8,12 @@ const main = async () => {
 	try {
 		const db = await connectDB()
 		const app = express()
+
 		app.use(json())
 		app.use('/', router({ db }))
 
-		const PORT = process.env.PORT ?? 5500
-		app.listen(PORT, () => console.log(`Auth API running on port ${PORT}`))
+		const port = process.env.PORT ?? 5500
+		app.listen(port, () => console.log(`Auth API running on port ${port}`))
 	} catch (error) {
 		console.error(error)
 	}

@@ -1791,28 +1791,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@topography/auth_api@workspace:api/auth":
-  version: 0.0.0-use.local
-  resolution: "@topography/auth_api@workspace:api/auth"
-  dependencies:
-    "@topography/common": "workspace:^"
-    "@types/bcrypt": ^5.0.0
-    "@types/express": ^4.17.13
-    "@types/jsonwebtoken": ^8.5.8
-    "@types/mongodb": ^4.0.7
-    bcrypt: ^5.0.1
-    body-parser: ^1.20.0
-    dotenv: ^16.0.1
-    express: ^4.17.3
-    jsonwebtoken: ^8.5.1
-    mongodb: ^4.6.0
-    ts-node-dev: ^1.1.8
-    typescript: ^4.6.3
-    uid: ^2.0.0
-    zod: ^3.16.0
-  languageName: unknown
-  linkType: soft
-
 "@topography/client@workspace:client/common":
   version: 0.0.0-use.local
   resolution: "@topography/client@workspace:client/common"
@@ -1851,6 +1829,28 @@ __metadata:
     body-parser: ^1.20.0
     express: ^4.17.3
     json-schema-to-zod: ^0.0.0-beta.0
+    mongodb: ^4.6.0
+    ts-node-dev: ^1.1.8
+    typescript: ^4.6.3
+    uid: ^2.0.0
+    zod: ^3.16.0
+  languageName: unknown
+  linkType: soft
+
+"@topography/user_api@workspace:api/user":
+  version: 0.0.0-use.local
+  resolution: "@topography/user_api@workspace:api/user"
+  dependencies:
+    "@topography/common": "workspace:^"
+    "@types/bcrypt": ^5.0.0
+    "@types/express": ^4.17.13
+    "@types/jsonwebtoken": ^8.5.8
+    "@types/mongodb": ^4.0.7
+    bcrypt: ^5.0.1
+    body-parser: ^1.20.0
+    dotenv: ^16.0.1
+    express: ^4.17.3
+    jsonwebtoken: ^8.5.1
     mongodb: ^4.6.0
     ts-node-dev: ^1.1.8
     typescript: ^4.6.3
