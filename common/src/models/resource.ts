@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { z } from 'zod'
 import { Meta, metaSchema, newMeta } from './meta'
-import { objectIdSchema } from './object-id'
 
 export const resourceShapeSchema = <
 	D extends z.AnyZodObject,
@@ -11,13 +10,13 @@ export const resourceShapeSchema = <
 	metaExtensionSchema: M = z.object({}) as M
 ) =>
 	z.object({
-		_id: objectIdSchema,
+		id: z.string(),
 		meta: metaSchema(metaExtensionSchema),
 		data: dataSchema,
 	})
 
 export interface ResourceShape<D extends {}, M extends {} | undefined = undefined> {
-	_id: ObjectId
+	id: string
 	meta: Meta<M>
 	data: D
 }
@@ -27,12 +26,12 @@ type ResourceConstructorData<
 	E extends {} | undefined = undefined
 > = E extends undefined
 	? {
-			_id?: ObjectId
+			id?: string
 			meta?: Partial<Meta<E>> & E
 			data: D
 	  }
 	: {
-			_id?: ObjectId
+			id?: string
 			meta: Partial<Meta<E>> & E
 			data: D
 	  }
@@ -40,27 +39,23 @@ type ResourceConstructorData<
 export class Resource<D extends {}, M extends {} | undefined = undefined>
 	implements ResourceShape<D, M>
 {
-	readonly _id: ObjectId
+	readonly id: string
 	readonly meta: Meta<M>
 	private _data: D
-
-	get id() {
-		return this._id.toString()
-	}
 
 	get data() {
 		return this._data
 	}
 
-	constructor({ _id, meta, data }: ResourceConstructorData<D, M>) {
-		this._id = _id ?? new ObjectId()
+	constructor({ id, meta, data }: ResourceConstructorData<D, M>) {
+		this.id = id ?? new ObjectId().toString()
 		this.meta = newMeta(meta) as Meta<M>
 		this._data = data
 	}
 
-	toBson(): ResourceShape<D, M> {
+	toBson() {
 		return {
-			_id: this._id,
+			id: new ObjectId(this.id),
 			meta: this.meta,
 			data: this._data,
 		}
